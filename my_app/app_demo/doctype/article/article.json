@@ -1,32 +1,63 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2023-11-28 19:03:24.864357",
+ "creation": "2023-11-28 23:50:43.005858",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "name1",
-  "username"
+  "article_name",
+  "image",
+  "author",
+  "description",
+  "isbn",
+  "status",
+  "publisher"
  ],
  "fields": [
   {
-   "fieldname": "name1",
-   "fieldtype": "Text",
+   "fieldname": "article_name",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "name",
+   "label": "Article Name",
    "reqd": 1
   },
   {
-   "fieldname": "username",
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
+  },
+  {
+   "fieldname": "author",
    "fieldtype": "Data",
-   "label": "username"
+   "label": "Author"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "isbn",
+   "fieldtype": "Data",
+   "label": "ISBN"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Issued\nAvailable"
+  },
+  {
+   "fieldname": "publisher",
+   "fieldtype": "Data",
+   "label": "Publisher"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-28 19:38:10.891677",
+ "modified": "2023-11-28 23:50:43.005858",
  "modified_by": "Administrator",
  "module": "APP_DEMO",
  "name": "Article",
