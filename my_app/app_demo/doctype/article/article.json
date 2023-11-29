@@ -13,7 +13,9 @@
   "description",
   "isbn",
   "status",
-  "publisher"
+  "publisher",
+  "route",
+  "published"
  ],
  "fields": [
   {
@@ -53,11 +55,24 @@
    "fieldname": "publisher",
    "fieldtype": "Data",
    "label": "Publisher"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route"
+  },
+  {
+   "default": "0",
+   "fieldname": "published",
+   "fieldtype": "Check",
+   "label": "Published"
   }
  ],
+ "has_web_view": 1,
  "index_web_pages_for_search": 1,
+ "is_published_field": "published",
  "links": [],
- "modified": "2023-11-28 23:50:43.005858",
+ "modified": "2023-11-29 01:25:53.195268",
  "modified_by": "Administrator",
  "module": "APP_DEMO",
  "name": "Article",
@@ -76,6 +91,7 @@
    "write": 1
   }
  ],
+ "route": "articles",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
