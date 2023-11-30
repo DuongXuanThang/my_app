@@ -1,10 +1,38 @@
 <div class="py-8 row">
-	<div class="col-sm-1">
-	<img alt="{{ doc.name }}" src="{{ doc.image }}"/>
-	</div>
-	<div class="col">
-	<a class="font-size-lg" href="{{ doc.route }}">{{ doc.name }}</a>
-	<p class="text-muted">By {{ doc.author }}</p>
-	</div>
-	</div>
-	
+    <div class="col-sm-1">
+        <img alt="{{ doc.name }}" src="{{ doc.image }}"/>
+    </div>
+    <div class="col">
+        <a class="font-size-lg" href="{{ doc.route }}">{{ doc.name }}</a>
+        <p class="text-muted">By {{ doc.author }}</p>
+        <!-- Thêm nút xóa ẩn -->
+		<button id="deleteButton" class="delete-button" onclick='deleteRecord("{{ doc.name }}")'>Xóa</button>
+    </div>
+</div>
+<script>
+    // Hàm xóa
+    function deleteRecord(recordName) {
+        frappe.confirm(
+            "Bạn có chắc chắn muốn xóa bản ghi này không?",
+            function() {
+                frappe.call({
+					type: "GET",
+                    method: 'my_app.api.article.delete_article',
+                    args: {
+                        record_name: recordName
+                    },
+                    callback: function(response) {
+						console.log(response)
+                        if (response.message === 'success') {
+                            frappe.msgprint('Bản ghi đã được xóa thành công.');
+                            // Có thể thực hiện các hành động khác sau khi xóa
+							window.location.reload(true);
+                        } else {
+                            frappe.msgprint('Không thể xóa bản ghi.');
+                        }
+                    }
+                });
+            }
+        );
+    }
+</script>

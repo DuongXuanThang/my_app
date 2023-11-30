@@ -3,6 +3,5 @@
 
 frappe.ui.form.on('Article', {
 	// refresh: function(frm) {
-	
 	// }
 });
