@@ -1,14 +1,50 @@
-<div class="py-8 row">
-    <div class="col-sm-1">
-        <img alt="{{ doc.name }}" src="{{ doc.image }}"/>
-    </div>
-    <div class="col">
-        <a class="font-size-lg" href="{{ doc.route }}">{{ doc.name }}</a>
-        <p class="text-muted">By {{ doc.author }}</p>
-        <!-- Thêm nút xóa ẩn -->
-		<button id="deleteButton" class="delete-button" onclick='deleteRecord("{{ doc.name }}")'>Xóa</button>
-    </div>
-</div>
+	<div class="py-8 row">
+		<div class="col-sm-1">
+			<img alt="{{ doc.name }}" src="{{ doc.image }}"/>
+		</div>
+		<div class="col">
+			<a class="font-size-lg" href="{{ doc.route }}">{{ doc.name }}</a>
+			<p class="text-muted">By {{ doc.author }}</p>
+			<!-- Thêm nút xóa ẩn -->
+			<button id="deleteButton" class="delete-button" onclick='deleteRecord("{{ doc.name }}")'>Xóa</button>
+		</div>
+	</div>
+<style>
+	.col {
+		flex: 0 0 calc(33.33% - 10px);
+		margin-bottom: 20px;
+		background-color: #ecf0f1;
+		padding: 10px;
+		border-radius: 4px;
+	}
+	.add-button {
+		background-color: #27ae60;
+		color: #fff;
+		border: none;
+		padding: 8px 15px;
+		cursor: pointer;
+		border-radius: 4px;
+		font-size: 16px;
+		transition: background-color 0.3s;
+	}
+
+	.add-button:hover {
+		background-color: #219952;
+	}
+    .delete-button {
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+    }
+
+    .delete-button:hover {
+        background-color: #2980b9;
+    }
+</style>
 <script>
     // Hàm xóa
     function deleteRecord(recordName) {
