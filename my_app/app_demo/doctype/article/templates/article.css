@@ -1,8 +1,0 @@
-/* custom_styles.css */
-.custom-style .delete-button {
-    display: none;
-}
-
-.custom-style .row:hover .delete-button {
-    display: inline-block;
-}
