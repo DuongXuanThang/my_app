@@ -1,0 +1,78 @@
+{
+ "actions": [],
+ "creation": "2023-12-04 01:36:00.251878",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "preview",
+  "photo",
+  "is_processed",
+  "number_of_times_processed",
+  "people",
+  "objects"
+ ],
+ "fields": [
+  {
+   "fieldname": "preview",
+   "fieldtype": "HTML",
+   "label": "Preview"
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Link",
+   "label": "Photo",
+   "options": "File"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_processed",
+   "fieldtype": "Check",
+   "label": "Is Processed"
+  },
+  {
+   "default": "0",
+   "fieldname": "number_of_times_processed",
+   "fieldtype": "Int",
+   "label": "Number of times Processed"
+  },
+  {
+   "fieldname": "people",
+   "fieldtype": "Table",
+   "label": "People",
+   "options": "ROI Person_Demo"
+  },
+  {
+   "fieldname": "objects",
+   "fieldtype": "Table",
+   "label": "Objects",
+   "options": "ROI Object_Demo"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-04 01:36:00.251878",
+ "modified_by": "Administrator",
+ "module": "APP_DEMO",
+ "name": "Photo_Demo",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
