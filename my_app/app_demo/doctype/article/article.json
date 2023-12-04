@@ -16,7 +16,10 @@
   "status",
   "publisher",
   "route",
-  "published"
+  "published",
+  "person",
+  "relate_session_section",
+  "namesession"
  ],
  "fields": [
   {
@@ -68,13 +71,29 @@
    "fieldname": "published",
    "fieldtype": "Check",
    "label": "Published"
+  },
+  {
+   "fieldname": "person",
+   "fieldtype": "Table",
+   "label": "Person",
+   "options": "Person app"
+  },
+  {
+   "fieldname": "relate_session_section",
+   "fieldtype": "Section Break",
+   "label": "Relate Session"
+  },
+  {
+   "fieldname": "namesession",
+   "fieldtype": "Data",
+   "label": "NameSession"
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2023-11-30 19:08:20.333337",
+ "modified": "2023-12-03 20:50:23.005640",
  "modified_by": "Administrator",
  "module": "APP_DEMO",
  "name": "Article",

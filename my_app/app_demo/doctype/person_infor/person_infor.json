@@ -1,28 +1,40 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2023-11-30 19:25:36.457562",
+ "creation": "2023-12-03 18:38:54.418744",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "district_name"
+  "person_name",
+  "user",
+  "file"
  ],
  "fields": [
   {
-   "fieldname": "district_name",
+   "fieldname": "person_name",
+   "fieldtype": "Data",
+   "label": "Person Name"
+  },
+  {
+   "fieldname": "user",
    "fieldtype": "Link",
-   "label": "District Name",
-   "options": "Province"
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "fieldname": "file",
+   "fieldtype": "Attach Image",
+   "label": "File"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-30 19:28:01.554031",
+ "modified": "2023-12-03 19:14:48.256351",
  "modified_by": "Administrator",
  "module": "APP_DEMO",
- "name": "District",
+ "name": "Person Infor",
  "owner": "Administrator",
  "permissions": [
   {

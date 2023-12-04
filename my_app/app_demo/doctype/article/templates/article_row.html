@@ -6,7 +6,9 @@
 			<a class="font-size-lg" href="{{ doc.route }}">{{ doc.name }}</a>
 			<p class="text-muted">By {{ doc.author }}</p>
 			<!-- Thêm nút xóa ẩn -->
-			<button id="deleteButton" class="delete-button" onclick='deleteRecord("{{ doc.name }}")'>Xóa</button>
+			<button class="delete-button" onclick='deleteRecord("{{ doc.name }}")'>Delete</button>
+            <button class="add-button" onclick='addRecord()'>Add</button>
+            <button class="update-button" onclick='updateRecord("{{ doc.name }}")'>Edit</button>
 		</div>
 	</div>
 <style>
@@ -16,6 +18,20 @@
 		background-color: #ecf0f1;
 		padding: 10px;
 		border-radius: 4px;
+	}
+    .update-button {
+		background-color: #27ae60;
+		color: #fff;
+		border: none;
+		padding: 8px 15px;
+		cursor: pointer;
+		border-radius: 4px;
+		font-size: 16px;
+		transition: background-color 0.3s;
+	}
+
+	.update-button:hover {
+		background-color: #219952;
 	}
 	.add-button {
 		background-color: #27ae60;
@@ -65,6 +81,51 @@
 							window.location.reload(true);
                         } else {
                             frappe.msgprint('Không thể xóa bản ghi.');
+                        }
+                    }
+                });
+            }
+        );
+    }
+    function addRecord() {
+        frappe.confirm(
+            "Bạn có chắc chắn muốn thêm bản ghi này không?",
+            function() {
+                frappe.call({
+					type: "GET",
+                    method: 'my_app.api.article.add_list',
+                    args: {
+                    },
+                    callback: function(response) {
+						console.log(response)
+                        if (response.message === 'success') {
+                            frappe.msgprint('Bản ghi đã được xóa thành công.');
+							window.location.reload(true);
+                        } else {
+                            frappe.msgprint('Không thể xóa bản ghi.');
+                        }
+                    }
+                });
+            }
+        );
+    }
+    function updateRecord(recordName) {
+        frappe.confirm(
+            "Bạn có chắc chắn muốn sửa bản ghi này không?",
+            function() {
+                frappe.call({
+					type: "GET",
+                    method: 'my_app.api.article.update_list',
+                    args: {
+                        record_name: recordName
+                    },
+                    callback: function(response) {
+						console.log(response)
+                        if (response.message === 'success') {
+                            frappe.msgprint('Bản ghi đã được sửa thành công.');
+							window.location.reload(true);
+                        } else {
+                            frappe.msgprint('Không thể sửa bản ghi.');
                         }
                     }
                 });
