@@ -79,7 +79,7 @@ app_license = "MIT"
 # ---------------
 # Hook on document methods and events
 
-doc_events = {"File": {"after_insert": "photos.utils.process_file"}}
+doc_events = {"File": {"after_insert": "app_demo.utils.process_file"}}
 
 # Scheduled Tasks
 # ---------------
@@ -117,7 +117,7 @@ doc_events = {"File": {"after_insert": "photos.utils.process_file"}}
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
-override_doctype_dashboards = {"File": "photos.utils.get_file_dashboard"}
+override_doctype_dashboards = {"File": "app_demo.utils.get_file_dashboard"}
 
 # exempt linked doctypes from being automatically cancelled
 #

@@ -1,6 +1,5 @@
 // Copyright (c) 2023, VGM and contributors
 // For license information, please see license.txt
-
 frappe.ui.form.on('Photo_Demo', {
 	onload: function(frm) {
 		if (!frm.doc.photo) {
@@ -31,20 +30,9 @@ frappe.ui.form.on('Photo_Demo', {
 		if (frm.is_new()) {
 			wrapper.html("");
 		} else {
-			// frappe.call({
-			// 	type: "GET",
-			// 	method: 'my_app.app_demo.api.photo',
-			// 	args: {
-			// 		name : frm.doc.name,
-			// 		roi : true
-			// 	},
-			// 	callback: function(response) {
-			// 		console.log(response)
-			// 	}
-			// });
 			wrapper.html(`
 				<div class="img_preview">
-					<img class="img-responsive" src="/api/method/api.photo?name=${frm.doc.name}&roi=true">
+					<img class="img-responsive" src="/api/method/app_demo.api.photo?name=${frm.doc.name}&roi=true">
 					</img>
 				</div>
 			`);

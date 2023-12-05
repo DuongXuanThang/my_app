@@ -4,7 +4,6 @@ import frappe
 
 from app_demo.utils import get_image_path, image_resize
 
-
 @frappe.whitelist(methods=["GET", "POST"])
 def roi(name: str):
     import cv2
