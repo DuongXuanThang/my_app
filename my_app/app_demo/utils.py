@@ -8,7 +8,7 @@ import frappe
 if TYPE_CHECKING:
     from frappe.core.doctype.file.file import File
 
-    from photos.photos.doctype.photo.photo import Photo
+    from my_app.app_demo.doctype.photo_demo.photo_demo import Photo_Demo
 
 
 def get_image_path(file_url: str):

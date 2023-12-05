@@ -2,7 +2,7 @@ import json
 
 import frappe
 
-from photos.utils import get_image_path, image_resize
+from app_demo.utils import get_image_path, image_resize
 
 
 @frappe.whitelist(methods=["GET", "POST"])
@@ -31,7 +31,7 @@ def roi(name: str):
 @frappe.whitelist(methods=["GET"])
 def photo(name: str, roi: bool = False):
     import cv2
-
+    print('123')
     photo = frappe.get_doc("Photo", name)
     _file = frappe.get_doc("File", photo.photo)
     image = cv2.imread(get_image_path(_file.file_url))
