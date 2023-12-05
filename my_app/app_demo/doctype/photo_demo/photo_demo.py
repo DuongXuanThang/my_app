@@ -18,14 +18,14 @@ class Photo_Demo(Document):
     def after_insert(self):
         # start processing etc, maybe via frappe.enqueue
         frappe.enqueue(
-            "my_app.app_demo.doctype.photo.photo.process_photo", queue="long", photo=self
+            "my_app.app_demo.doctype.photo_demo.photo_demo.process_photo", queue="long", photo=self
         )
 
     @frappe.whitelist()
     def process_photo(self):
         # re-run process photo for whatever reason
         frappe.enqueue(
-            "my_app.app_demo.doctype.photo.photo.process_photo", queue="long", photo=self
+            "my_app.app_demo.doctype.photo_demo.photo_demo.process_photo", queue="long", photo=self
         )
 
 
@@ -55,7 +55,7 @@ def process_photo(photo: Photo_Demo):
     encodings = face_recognition.face_encodings(img, boxes)
 
     for (encoding, location) in zip(encodings, boxes):
-        roi = frappe.new_doc("ROI")
+        roi = frappe.new_doc("ROI_Demo")
         roi.image = photo.photo
         roi.location = json.dumps(location)
         roi.encoding = json.dumps(encoding.tolist())

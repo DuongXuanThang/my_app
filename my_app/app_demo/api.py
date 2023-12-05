@@ -9,7 +9,7 @@ from app_demo.utils import get_image_path, image_resize
 def roi(name: str):
     import cv2
 
-    location, img = frappe.db.get_value("ROI", name, ["location", "image"])
+    location, img = frappe.db.get_value("ROI_Demo", name, ["location", "image"])
     _file = frappe.get_doc("File", img)
     top, right, bottom, left = json.loads(location)
     image = cv2.rectangle(
@@ -32,7 +32,7 @@ def roi(name: str):
 def photo(name: str, roi: bool = False):
     import cv2
     print('123')
-    photo = frappe.get_doc("Photo", name)
+    photo = frappe.get_doc("Photo_Demo", name)
     _file = frappe.get_doc("File", photo.photo)
     image = cv2.imread(get_image_path(_file.file_url))
 
@@ -40,7 +40,7 @@ def photo(name: str, roi: bool = False):
         # draw roi for all encodings, possibly with labels
         for _roi in photo.people:
             location, person = frappe.db.get_value(
-                "ROI", _roi.face, ["location", "person"]
+                "ROI_Demo", _roi.face, ["location", "person"]
             )
             top, right, bottom, left = json.loads(location)
             image = cv2.rectangle(image, (left, top), (right, bottom), (0, 0, 255), 6)
@@ -60,7 +60,7 @@ def filter_photo(*args, **kwargs):
         "File",
         filters={
             "is_folder": False,
-            "name": ("not in", frappe.get_all("Photo", pluck="photo")),
+            "name": ("not in", frappe.get_all("Photo_Demo", pluck="photo")),
         },
         fields=["name", "file_name"],
         as_list=True,

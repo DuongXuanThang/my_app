@@ -8,7 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "preview",
-  "person_identified",
+  "person",
   "related_information_section",
   "image",
   "encoding",
@@ -19,12 +19,6 @@
    "fieldname": "preview",
    "fieldtype": "Data",
    "label": "Preview"
-  },
-  {
-   "fieldname": "person_identified",
-   "fieldtype": "Link",
-   "label": "Person Identified",
-   "options": "Person_Demo"
   },
   {
    "fieldname": "related_information_section",
@@ -48,11 +42,17 @@
    "fieldname": "location",
    "fieldtype": "Data",
    "label": "Location"
+  },
+  {
+   "fieldname": "person",
+   "fieldtype": "Link",
+   "label": "Person Identified",
+   "options": "Person_Demo"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-04 01:31:27.106032",
+ "modified": "2023-12-04 20:50:15.766355",
  "modified_by": "Administrator",
  "module": "APP_DEMO",
  "name": "ROI_Demo",
