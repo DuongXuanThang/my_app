@@ -5,7 +5,7 @@ frappe.ui.form.on('Photo_Demo', {
 		if (!frm.doc.photo) {
 			frm.fields_dict["photo"].get_query = function(doc, dt, dn) {
 				return {
-					query:"photos.api.filter_photo",
+					query:"my_app.api.filter_photo",
 				}
 			};
 		}
@@ -30,9 +30,21 @@ frappe.ui.form.on('Photo_Demo', {
 		if (frm.is_new()) {
 			wrapper.html("");
 		} else {
+			frappe.call({
+				type: "GET",
+				method: 'my_app.api.photo',
+				args: {
+					name: frm.doc.name,
+					roi: true
+				},
+				callback: function(response) {
+					console.log(response)
+					
+				}
+			});
 			wrapper.html(`
 				<div class="img_preview">
-					<img class="img-responsive" src="/api/method/app_demo.api.photo?name=${frm.doc.name}&roi=true">
+					<img class="img-responsive" src="/api/method/my_app.api.photo?name=${frm.doc.name}&roi=true">
 					</img>
 				</div>
 			`);
