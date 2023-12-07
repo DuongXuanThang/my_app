@@ -1,0 +1,6 @@
+{%- extends "templates/web.html" %}
+
+{%- block script %}
+{{ super() }}
+<script src="{{ url_for('my_app', 'static/my_react_app/static/js/main.js') }}"></script>
+{%- endblock %}
