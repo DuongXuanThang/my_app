@@ -17,7 +17,6 @@
   "publisher",
   "route",
   "published",
-  "person",
   "relate_session_section",
   "namesession"
  ],
@@ -73,12 +72,6 @@
    "label": "Published"
   },
   {
-   "fieldname": "person",
-   "fieldtype": "Table",
-   "label": "Person",
-   "options": "Person app"
-  },
-  {
    "fieldname": "relate_session_section",
    "fieldtype": "Section Break",
    "label": "Relate Session"
@@ -93,7 +86,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2023-12-03 20:50:23.005640",
+ "modified": "2023-12-07 18:29:03.586886",
  "modified_by": "Administrator",
  "module": "APP_DEMO",
  "name": "Article",

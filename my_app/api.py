@@ -1,5 +1,5 @@
 import json
-
+import requests
 import frappe
 
 from my_app.utils import get_image_path, image_resize
@@ -63,3 +63,78 @@ def filter_photo(*args, **kwargs):
         fields=["name", "file_name"],
         as_list=True,
     )
+@frappe.whitelist(methods="GET")
+def delete_article(record_name=None, **data):
+    try:
+        # Kiểm tra xem bản ghi tồn tại hay không
+        doc = frappe.get_doc('Article', record_name)
+        if doc:
+            # Xóa bản ghi
+            doc.delete()
+            frappe.db.commit()
+            return "success"
+        else:
+            return "fail"
+    except Exception as e:
+        return "fail"
+@frappe.whitelist(methods="GET")
+def update_list(record_name=None,**data):
+     try:
+        # Kiểm tra xem bản ghi tồn tại hay không
+        doc = frappe.get_doc('Article', record_name)
+        if doc:
+            doc.author="xuta"
+            doc.save()
+            frappe.db.commit()
+            return "success"
+        else:
+            return "fail"
+     except Exception as e:
+        return "fail"
+@frappe.whitelist(methods="GET")
+def add_list(**data):
+     try:
+        # Kiểm tra xem bản ghi tồn tại hay không
+        doc = frappe.new_doc('Article')
+        if doc:
+            doc.author="LOVe this girl"
+            doc.insert()
+            frappe.db.commit()
+            return "success"
+        else:
+            return "fail"
+     except Exception as e:
+        return "fail"
+@frappe.whitelist(methods="GET")
+def get_employees():
+     url = "https://dummy.restapiexample.com/api/v1/employees"
+     try:
+         # Gửi yêu cầu GET đến API
+        response = requests.get(url)
+
+        # Kiểm tra xem yêu cầu có thành công hay không (status code 200)
+        if response.status_code == 200:
+            # Lấy dữ liệu từ phản hồi
+            data = response.json()
+
+            # Kiểm tra xem có dữ liệu hay không
+            if data.get("data"):
+                # Lặp qua danh sách nhân viên và thêm vào bảng Article
+                for employee in data["data"]:
+                    # Tạo một bản ghi mới trong bảng Article
+                    article = frappe.new_doc("Article")
+                    # Đặt các giá trị từ dữ liệu API vào các trường tương ứng
+                    article.article_name = employee.get("employee_name")
+                    #Thêm các trường khác tương ứng
+                    article.insert()
+                    # Lưu bản ghi vào cơ sở dữ liệu
+                    frappe.db.commit()
+
+                print("Data added to Article table successfully.")
+            else:
+                print("No employee data found.")
+        else:
+            print(f"Failed to retrieve data. Status code: {response.status_code}")
+     
+     except Exception as e:
+        print(f"An error occurred: {str(e)}")
