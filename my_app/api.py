@@ -138,7 +138,7 @@ def get_employees():
      
      except Exception as e:
         print(f"An error occurred: {str(e)}")
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(methods="GET",allow_guest=True)
 def get_vue_data():
     # Logic to fetch data for Vue.js
     data = {"message": "Hello from Frappe!"}
