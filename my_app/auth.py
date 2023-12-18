@@ -12,9 +12,10 @@ from my_app.common import (
     exception_handel
 )
 
-from mbw_account_service.config_translate import i18n
+# from mbw_account_service.config_translate import i18n
 
 def add_device_notification(user_id, device_name=None, device_id=None):
+    print(device_name,device_id)
     try:
         if user_id and device_name and device_id:
             name_doc = frappe.db.get_value(
@@ -40,23 +41,18 @@ def add_device_notification(user_id, device_name=None, device_id=None):
         print('===login', e)
         return False
     
-# def remove_device_notification(user_id, device_id):
-#     try:
-#         if user_id and device_id:
-#             frappe.db.delete("User Device", {
-#                 "user": user_id,
-#                 "device_id": device_id
-#             })
-#             frappe.db.commit()
-#         return True
-#     except Exception as e:
-#         return False
+def remove_device_notification(user_id, device_id):
+    try:
+        if user_id and device_id:
+            frappe.db.delete("User Device", {
+                "user": user_id,
+                "device_id": device_id
+            })
+            frappe.db.commit()
+        return True
+    except Exception as e:
+        return False
 
-
-# def validate_employee(user):
-#     if not frappe.db.exists("Employee", dict(user_id=user)):
-#         frappe.response["message"] = "Please link Employee with this user"
-#         raise frappe.AuthenticationError(frappe.response["message"])
 
 @frappe.whitelist(allow_guest=True, methods='POST')
 def login(**kwargs):
@@ -65,15 +61,14 @@ def login(**kwargs):
         pwd = kwargs.get('pwd')
         device_name = kwargs.get('device_name')
         device_id = kwargs.get('device_id')
-
         login_manager = LoginManager()
+        
         login_manager.authenticate(usr, pwd)
         validate_employee(login_manager.user)
         login_manager.post_login()
-
         if frappe.response["message"] == "Logged In":
             emp_data = get_employee_by_user(login_manager.user, fields=[
-                                            "name", "employee_name"])
+                                            "name", "email"])
             # print("emp_data", emp_data)
             frappe.response['message'] = ""
             del frappe.local.response["full_name"]
@@ -95,10 +90,9 @@ def login(**kwargs):
         exception_handel(e)
 
 def validate_employee(user):
-    if not frappe.db.exists("Employee", dict(user_id=user)):
-        frappe.response["message"] = "Please link Employee with this user"
+    if not frappe.db.exists("User", dict(email=user)):
+        frappe.response["message"] = "Please link User with this user"
         raise frappe.AuthenticationError(frappe.response["message"])
-    
 #Logout
 @frappe.whitelist(allow_guest=True)
 def logout(device_id=None):

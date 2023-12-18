@@ -56,8 +56,8 @@ def get_employee_by_user(user, fields=["name"]):
     if isinstance(fields, str):
         fields = [fields]
     emp_data = frappe.db.get_value(
-        "Employee",
-        {"user_id": user},
+        "User",
+        {"email": user},
         fields,
         as_dict=1,
     )

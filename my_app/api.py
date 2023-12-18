@@ -116,7 +116,6 @@ def get_employees():
         if response.status_code == 200:
             # Lấy dữ liệu từ phản hồi
             data = response.json()
-
             # Kiểm tra xem có dữ liệu hay không
             if data.get("data"):
                 # Lặp qua danh sách nhân viên và thêm vào bảng Article
