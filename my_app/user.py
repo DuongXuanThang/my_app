@@ -2,10 +2,11 @@ import frappe
 from my_app.common import (gen_response,exception_handel,get_info_employee,get_employee_id,get_language, post_image, validate_image)
 from datetime import datetime
 import base64
-from mbw_account_service.config_translate import i18n
+# from mbw_account_service.config_translate import i18n
 # cập nhật tài khoản
-@frappe.whitelist(methods="PUT")
+@frappe.whitelist(allow_guest=True,methods="PUT")
 def update_profile(**kwargs):
+    print('1312312')
     try:
         employee_id = get_employee_id()
         date_format = '%Y/%m/%d'

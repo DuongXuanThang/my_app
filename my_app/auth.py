@@ -113,11 +113,13 @@ def logout(device_id=None):
 #reset password
 @frappe.whitelist(allow_guest=True)
 def reset_password(user):
+    print(user)
     if user == "Administrator":
         gen_response(500, "Không có sẵn", [])
 
     try:
         user = frappe.get_doc("User", user)
+        print(user)
         if not user.enabled:
             gen_response(500, "Gửi email thất bại", [])
 
