@@ -43,11 +43,11 @@ def update_profile(**kwargs):
             elif field == "image":
                 face_image = kwargs.get("image")
                 name_image = "avarta_"+employee_id
-                kwargs['image'] = post_image(name_image, face_image, "Employee", employee_id)
+                kwargs['image'] = post_image(name_image, face_image, "User", employee_id)
                 
-       
+        print(employee_id)
         if frappe.db.exists("User", employee_id, cache=True):
-            doc = frappe.get_doc('Employee', employee_id)
+            doc = frappe.get_doc('User', employee_id)
             for field, value in dict(kwargs).items():
                 setattr(doc, field, value)
                 if field == "date_of_birth":
@@ -66,14 +66,13 @@ def update_profile(**kwargs):
 def get_employee_info():
     try:
         employee_id = get_employee_id()
-        print("dữ liệu user",employee_id)
         if not employee_id:
             gen_response(404 ,'Not found user',[])
             return 
-        user_info = get_info_employee(name= employee_id,fields=["employee", "employee_name","gender", "date_of_birth", "date_of_joining" ,"salutation", "image","user_id","department", "designation","cell_number", "current_address"])
-        user_info['date_of_birth'] = user_info['date_of_birth']
-        if user_info['image']:
-            user_info['image'] = validate_image(user_info['image'])
+        user_info = get_info_employee(name= employee_id,fields=["full_name"])
+        # user_info['date_of_birth'] = user_info['date_of_birth']
+        # if user_info['image']:
+        #     user_info['image'] = validate_image(user_info['image'])
 
         gen_response(200,'Success',user_info)
     except Exception as e:

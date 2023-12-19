@@ -98,7 +98,7 @@ def get_employee_id():
         return ""
     
 def get_info_employee(name, fields=['*']):
-    info = frappe.db.get_value("Employee", name, fields, as_dict=1)
+    info = frappe.db.get_value("User", name, fields, as_dict=1)
     # shift_type_now = get_shift_type_now(info.get('employee'))
     # info['shift'] = shift_type_now
     return info
