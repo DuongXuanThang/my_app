@@ -2,20 +2,19 @@ import frappe
 from my_app.common import (gen_response,exception_handel,get_info_employee,get_employee_id,get_language, post_image, validate_image)
 from datetime import datetime
 import base64
-# from mbw_account_service.config_translate import i18n
+# from my_app.config_translate import i18n
 # cập nhật tài khoản
 @frappe.whitelist(allow_guest=True,methods="PUT")
 def update_profile(**kwargs):
-    print('1312312')
     try:
         employee_id = get_employee_id()
         date_format = '%Y/%m/%d'
-        fieldAccess = ["full_name", "image", "gender", "date_of_birth", "cell_number", 'current_address']
+        fieldAccess = ["full_name"]
         del kwargs['cmd']
         
         for field, value in dict(kwargs).items():
             if field not in fieldAccess:
-                mess = i18n.t('translate.invalid_value', locale=get_language()) + "" + field
+                # mess = i18n.t('translate.invalid_value', locale=get_language()) + "" + field
                 frappe.local.response['message'] = mess
                 frappe.local.response['http_status_code'] = 404
                 frappe.response["result"] = []
@@ -47,7 +46,7 @@ def update_profile(**kwargs):
                 kwargs['image'] = post_image(name_image, face_image, "Employee", employee_id)
                 
        
-        if frappe.db.exists("Employee", employee_id, cache=True):
+        if frappe.db.exists("User", employee_id, cache=True):
             doc = frappe.get_doc('Employee', employee_id)
             for field, value in dict(kwargs).items():
                 setattr(doc, field, value)
@@ -55,10 +54,10 @@ def update_profile(**kwargs):
                     kwargs['date_of_birth'] = dob
             doc.save()
         
-        gen_response(200, i18n.t('translate.update_success', locale=get_language()),kwargs)
+        gen_response(200, 'success',kwargs)
 
     except Exception as e:
-        gen_response(500, i18n.t('translate.error', locale=get_language()), [])
+        gen_response(500, 'Error', [])
         return exception_handel(e)
 
 
@@ -69,14 +68,14 @@ def get_employee_info():
         employee_id = get_employee_id()
         print("dữ liệu user",employee_id)
         if not employee_id:
-            gen_response(404 ,i18n.t('translate.user_not_found', locale=get_language()),[])
+            gen_response(404 ,'Not found user',[])
             return 
         user_info = get_info_employee(name= employee_id,fields=["employee", "employee_name","gender", "date_of_birth", "date_of_joining" ,"salutation", "image","user_id","department", "designation","cell_number", "current_address"])
         user_info['date_of_birth'] = user_info['date_of_birth']
         if user_info['image']:
             user_info['image'] = validate_image(user_info['image'])
 
-        gen_response(200,i18n.t('translate.successfully', locale=get_language()),user_info)
+        gen_response(200,'Success',user_info)
     except Exception as e:
         exception_handel(e)
         # gen_response(500,i18n.t('translate.error', locale=get_language()), [])

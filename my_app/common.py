@@ -81,25 +81,17 @@ def exception_handel(e):
         return gen_response(406, cstr(e))
 
 def get_user_id():
-    print(frappe.local.request.headers)
     headers = frappe.local.request.headers.get("Authorization")
-    print(headers)
     usrPass = headers.split(" ")[1]
-    print(usrPass)
     str_b64Val = base64.b64decode(usrPass).decode('utf-8')
-    print(str_b64Val)
     list_key = str_b64Val.split(':')
-    print(list_key)
     api_key = list_key[0]
-    print(api_key)
     user_id = frappe.db.get_value('User', {"api_key": api_key})
-    print(user_id)
     return user_id
 
 def get_employee_id():
     try:
         user_id = get_user_id()
-        print(user_id)
         return get_employee_by_user(user_id).get("name")
     
     except:
