@@ -1,5 +1,5 @@
 import frappe
-from my_app.common import (gen_response,exception_handel,get_info_employee,get_employee_id,get_language, post_image, validate_image)
+from my_app.common import (gen_response,exception_handel,get_info_employee,get_employee_id,get_language, post_image, validate_image,get_info_KB)
 from datetime import datetime
 import base64
 # from my_app.config_translate import i18n
@@ -69,12 +69,29 @@ def get_employee_info():
         if not employee_id:
             gen_response(404 ,'Not found user',[])
             return 
-        user_info = get_info_employee(name= employee_id,fields=["full_name"])
+        user_info = get_info_employee(name= employee_id,fields=["full_name", "email","first_name","username"])
         # user_info['date_of_birth'] = user_info['date_of_birth']
         # if user_info['image']:
         #     user_info['image'] = validate_image(user_info['image'])
 
         gen_response(200,'Success',user_info)
+    except Exception as e:
+        exception_handel(e)
+        # gen_response(500,i18n.t('translate.error', locale=get_language()), [])
+        
+@frappe.whitelist(methods="GET")
+def get_KichBan_info():
+    try:
+        user_id = get_employee_id()
+        if not user_id:
+            gen_response(404 ,'Not found KB',[])
+            return 
+        KB_listinfo = get_info_KB(userid= user_id,fields=["name_kb", "description_kb","user"])
+        # user_info['date_of_birth'] = user_info['date_of_birth']
+        # if user_info['image']:
+        #     user_info['image'] = validate_image(user_info['image'])
+
+        gen_response(200,'Success',KB_listinfo)
     except Exception as e:
         exception_handel(e)
         # gen_response(500,i18n.t('translate.error', locale=get_language()), [])

@@ -97,11 +97,26 @@ def get_employee_id():
     except:
         return ""
     
+
+    
+     
 def get_info_employee(name, fields=['*']):
     info = frappe.db.get_value("User", name, fields, as_dict=1)
     # shift_type_now = get_shift_type_now(info.get('employee'))
     # info['shift'] = shift_type_now
     return info
+def get_info_KB(userid, fields=["*"]):
+    if isinstance(fields, str):
+        fields = [fields]
+
+    kb_list_info = frappe.get_all(
+        "KichBanDemo",
+        filters={"user": userid},
+        fields=fields,
+        as_list=False,
+    )
+
+    return kb_list_info
 
 def post_image(name_image, faceimage, doc_type, doc_name):
     # save file and insert Doctype File
