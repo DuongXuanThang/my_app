@@ -11,8 +11,9 @@
   "scenario_name",
   "description",
   "last_updated",
+  "user",
   "products",
-  "user"
+  "form_question"
  ],
  "fields": [
   {
@@ -36,7 +37,7 @@
   },
   {
    "fieldname": "products",
-   "fieldtype": "Table MultiSelect",
+   "fieldtype": "Table",
    "label": "Products",
    "options": "ProductLink"
   },
@@ -46,11 +47,17 @@
    "in_list_view": 1,
    "label": "User",
    "options": "User"
+  },
+  {
+   "fieldname": "form_question",
+   "fieldtype": "Table",
+   "label": "FormQuestion",
+   "options": "FormQuestion"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-19 19:42:09.785749",
+ "modified": "2023-12-21 00:24:45.531938",
  "modified_by": "Administrator",
  "module": "VGM_Module",
  "name": "Scenario",

@@ -17,36 +17,42 @@
  "fields": [
   {
    "fieldname": "scenario",
-   "fieldtype": "Color",
+   "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Scenario",
-   "options": "Scenario"
+   "options": "Scenario",
+   "reqd": 1
   },
   {
    "fieldname": "product",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Product",
-   "options": "Product"
+   "options": "Product",
+   "reqd": 1
   },
   {
    "fieldname": "images",
-   "fieldtype": "JSON",
+   "fieldtype": "Attach Image",
    "label": "Images"
   },
   {
    "fieldname": "sum",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Sum"
   },
   {
    "fieldname": "user",
    "fieldtype": "Link",
    "label": "User",
-   "options": "User"
+   "options": "User",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-19 19:25:16.752144",
+ "modified": "2023-12-21 01:39:57.008457",
  "modified_by": "Administrator",
  "module": "VGM_Module",
  "name": "ReportScenario",

@@ -7,6 +7,7 @@ from frappe.website.website_generator import WebsiteGenerator
 import requests
 class Article(WebsiteGenerator):
    def before_save(self):
+        print('123132123123');
         """
         Phương thức này sẽ được gọi trước khi một tài liệu (document) được lưu (create hoặc update).
         """
