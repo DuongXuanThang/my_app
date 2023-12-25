@@ -12,7 +12,8 @@
   "product",
   "images",
   "sum",
-  "user"
+  "user",
+  "form_answer"
  ],
  "fields": [
   {
@@ -48,11 +49,17 @@
    "label": "User",
    "options": "User",
    "reqd": 1
+  },
+  {
+   "fieldname": "form_answer",
+   "fieldtype": "Table",
+   "label": "Form Answer",
+   "options": "FormAnsewer"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-21 01:39:57.008457",
+ "modified": "2023-12-22 22:00:01.681320",
  "modified_by": "Administrator",
  "module": "VGM_Module",
  "name": "ReportScenario",
