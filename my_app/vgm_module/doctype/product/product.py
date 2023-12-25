@@ -21,7 +21,7 @@ class Product(Document):
             # custom_field = self.get('custom_field')
             # custom_data = json.loads(custom_field)
             # product_id_older = custom_data.get('product_id')
-            self.update_product()          
+            self.update_product()
         else:
             # Kiểm tra và thêm sản phẩm
             self.check_and_add_product()
@@ -42,14 +42,14 @@ class Product(Document):
                 products: Products = product_recognition.get_products()
                 products.update_by_id(collection_name, product_id_ai, self.product_name)
                 # Lien he tac gia de hieu chi tiet
-                # imageSourceDBs = frappe.get_all("Product_Image", filters={"parent": self.name}, fields=["custom_field", "name", "uri_image"])
+                imageSourceDBs = frappe.get_all("Product_Image", filters={"parent": self.name}, fields=["custom_field", "name", "uri_image"])
                 # photoInputs = self.get("photos")
                 # photoUpdates = [photo for photo in photoInputs if any(photo['name'] == photo_source['name'] for photo_source in imageSourceDBs)]
                 # photoAdds = [photo for photo in photoInputs if photo not in photoUpdates]
                 # photoDeletes = [photo_source for photo_source in imageSourceDBs if photo_source['name'] not in set(photo['name'] for photo in photoInputs)]
-                
-                
-    
+
+
+
     def check_and_add_product(self):
         # Sử dụng self để truy cập trường product_name
         RECOGNITION_API_KEY: str = '00000000-0000-0000-0000-000000000002'
@@ -57,7 +57,7 @@ class Product(Document):
         product_recognition: ProductRecognitionService = deep_vision.init_product_recognition_service(RECOGNITION_API_KEY)
         product_name = self.product_name
         # Lấy đường dẫn của các hình ảnh từ table
-        base_url = "http://mbw.ts:8000"
+        base_url = frappe.utils.get_request_site_address()
         image_paths = [base_url + photo.uri_image for photo in self.photos]
         collection_name = 'VGM_Product'
         product_id = str(uuid.uuid4())
@@ -74,12 +74,15 @@ class Product(Document):
             product_AI = response.get('result', {}).get('product_id')
             custom_field_value = json.dumps({"product_id": product_AI})
             self.set('custom_field', custom_field_value)
-            print(self.photos)
+            for i in range(0, len(self.photos), 1):
+                custom_field_image = json.dumps({"image_id": image_ids[i], "product_id": product_id})
+                self.photos[i].set('custom_field', custom_field_image)
+                print(self.photos[i])
         else:
-            frappe.msgprint("Không phân tích được ảnh")   
-            
-        
-            
+            frappe.msgprint("Không phân tích được ảnh")
 
-        
-      
+
+
+
+
+
