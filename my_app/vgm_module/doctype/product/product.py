@@ -40,13 +40,13 @@ class Product(Document):
                 self.check_and_add_product()
             else:
                 products: Products = product_recognition.get_products()
-                products.rename(collection_name, product_id, self.product_name)
+                products.update_by_id(collection_name, product_id_ai, self.product_name)
                 # Lien he tac gia de hieu chi tiet
-                imageSourceDBs = frappe.get_all("Product_Image", filters={"parent": self.name}, fields=["custom_field", "name", "uri_image"])
-                photoInputs = self.get("photos")
-                photoUpdates = [photo for photo in photoInputs if any(photo['name'] == photo_source['name'] for photo_source in imageSourceDBs)]
-                photoAdds = [photo for photo in photoInputs if photo not in photoUpdates]
-                photoDeletes = [photo_source for photo_source in imageSourceDBs if photo_source['name'] not in set(photo['name'] for photo in photoInputs)]
+                # imageSourceDBs = frappe.get_all("Product_Image", filters={"parent": self.name}, fields=["custom_field", "name", "uri_image"])
+                # photoInputs = self.get("photos")
+                # photoUpdates = [photo for photo in photoInputs if any(photo['name'] == photo_source['name'] for photo_source in imageSourceDBs)]
+                # photoAdds = [photo for photo in photoInputs if photo not in photoUpdates]
+                # photoDeletes = [photo_source for photo_source in imageSourceDBs if photo_source['name'] not in set(photo['name'] for photo in photoInputs)]
                 
                 
     
@@ -74,6 +74,7 @@ class Product(Document):
             product_AI = response.get('result', {}).get('product_id')
             custom_field_value = json.dumps({"product_id": product_AI})
             self.set('custom_field', custom_field_value)
+            print(self.photos)
         else:
             frappe.msgprint("Không phân tích được ảnh")   
             

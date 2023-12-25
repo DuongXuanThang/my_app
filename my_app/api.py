@@ -142,3 +142,11 @@ def get_vue_data():
     # Logic to fetch data for Vue.js
     data = {"message": "Hello from Frappe!"}
     return data
+@frappe.whitelist()
+def execute_function(*args,**kwargs):
+    """
+    This fonction will be executed when the Execute Action Button will be clicked
+    """
+    print('Hello World')
+    # The data is transmitted via keyword argument
+    print(kwargs)

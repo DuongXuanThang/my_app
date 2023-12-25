@@ -10,9 +10,9 @@
  "field_order": [
   "scenario",
   "product",
+  "user",
   "images",
   "sum",
-  "user",
   "form_answer"
  ],
  "fields": [
@@ -46,6 +46,7 @@
   {
    "fieldname": "user",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "User",
    "options": "User",
    "reqd": 1
@@ -59,7 +60,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-22 22:00:01.681320",
+ "modified": "2023-12-24 21:40:57.273387",
  "modified_by": "Administrator",
  "module": "VGM_Module",
  "name": "ReportScenario",
