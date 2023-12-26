@@ -8,7 +8,6 @@ from my_app.common import (
     gen_response,
     generate_key,
     get_employee_by_user,
-    get_language,
     exception_handel
 )
 
@@ -103,7 +102,6 @@ def logout(device_id=None):
         frappe.response["message"] = "Logged Out"
         gen_response(200, "Đẵng xuất thành công")
     except frappe.AuthenticationError:
-        # gen_response(204, i18n.t('translate.logout_error', locale=get_language()), [])
         exception_handel(e)
         return None
     except Exception as e:

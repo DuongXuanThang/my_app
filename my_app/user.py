@@ -79,19 +79,29 @@ def get_employee_info():
         exception_handel(e)
         # gen_response(500,i18n.t('translate.error', locale=get_language()), [])
         
-@frappe.whitelist(methods="GET")
-def get_KichBan_info():
+@frappe.whitelist(allow_guest=True,methods="GET")
+def get_KichBan_info(**kwargs):
     try:
-        user_id = get_employee_id()
-        if not user_id:
-            gen_response(404 ,'Not found KB',[])
-            return 
-        KB_listinfo = get_info_KB(userid= user_id,fields=["name_kb", "description_kb","user"])
-        # user_info['date_of_birth'] = user_info['date_of_birth']
-        # if user_info['image']:
-        #     user_info['image'] = validate_image(user_info['image'])
-
-        gen_response(200,'Success',KB_listinfo)
+        # Kiểm tra xem bản ghi tồn tại hay không
+        doc = frappe.get_doc('Scenario',kwargs.get('name'))
+        if doc:
+            return doc
+        else:
+            return "fail"
     except Exception as e:
-        exception_handel(e)
-        # gen_response(500,i18n.t('translate.error', locale=get_language()), [])
+        return "fail"
+    # try:
+        
+    #     # user_id = get_employee_id()
+    #     # if not user_id:
+    #     #     gen_response(404 ,'Not found KB',[])
+    #     #     return 
+    #     # KB_listinfo = get_info_KB(userid= user_id,fields=["name_kb", "description_kb","user"])
+    #     # # user_info['date_of_birth'] = user_info['date_of_birth']
+    #     # # if user_info['image']:
+    #     # #     user_info['image'] = validate_image(user_info['image'])
+
+    #     gen_response(200,'Success')
+    # except Exception as e:
+    #     exception_handel(e)
+    #     # gen_response(500,i18n.t('translate.error', locale=get_language()), [])

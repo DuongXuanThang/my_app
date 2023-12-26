@@ -43,12 +43,23 @@ class Product(Document):
                 products.update_by_id(collection_name, product_id_ai, self.product_name)
                 # Lien he tac gia de hieu chi tiet
                 imageSourceDBs = frappe.get_all("Product_Image", filters={"parent": self.name}, fields=["custom_field", "name", "uri_image"])
-                # photoInputs = self.get("photos")
+                print(imageSourceDBs)
+                photoInputs = self.get("photos")
+                print(photoInputs)
                 # photoUpdates = [photo for photo in photoInputs if any(photo['name'] == photo_source['name'] for photo_source in imageSourceDBs)]
                 # photoAdds = [photo for photo in photoInputs if photo not in photoUpdates]
                 # photoDeletes = [photo_source for photo_source in imageSourceDBs if photo_source['name'] not in set(photo['name'] for photo in photoInputs)]
-
-
+                photos_with_null_custom_field = []
+                for photo in self.photos:
+                    if photo["custom_field"] == null:
+                        print('123')
+                        return
+                        image_ids = [str(uuid.uuid4())]
+                        image_paths = [base_url + photo.uri_image for photo in self.photos]
+                        photos_with_null_custom_field.append(image_ids)
+                        response = products.add(collection_name, product_id_ai, self.product_name, image_ids, image_paths)
+                    else:
+                        print('1234')
 
     def check_and_add_product(self):
         # Sử dụng self để truy cập trường product_name
