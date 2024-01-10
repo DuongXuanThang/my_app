@@ -36,3 +36,19 @@ class DashboardRetail(Document):
                     frappe.msgprint("KhÃ´ng phÃ¢n tÃ­ch Ä‘Æ°á»£c áº£nh") 
                     count_product = count_product + 0
             self.report_product[i].product_count = count_product
+    def after_insert(self):
+        base_url = frappe.utils.get_request_site_address()
+        for i in range(0, len(self.report_product), 1):
+            photos = self.report_product[i].photos
+            count_product = 0
+            for j in range(0, len(photos), 1):
+                doc = frappe.get_doc({
+                    "docstatus" : 0,
+                    "uri_image": photos[j].uri_image,
+                    "parent": self.report_product[i].name,
+                    "parentfield": "photos",
+                    "parenttype": "ReportProduct_SKU",
+                    "doctype": "BoothPhotoProduct",
+                })
+                doc.insert(ignore_permissions=True)
+       
