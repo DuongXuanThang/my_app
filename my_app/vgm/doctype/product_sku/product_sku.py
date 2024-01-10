@@ -12,15 +12,11 @@ import uuid
 from deepvision import DeepVision
 from deepvision.service import ProductRecognitionService
 from deepvision.collections import Products
-class Product(Document):
+class Product_SKU(Document):
     def before_save(self):
-        # Kiểm tra xem sản phẩm đã tồn tại hay chưa để biết là đang sửa hay tạo mới Product
-        product_exists = frappe.get_list("Product", filters={"name": self.name}, limit=1)
+        # Check exist Product
+        product_exists = frappe.get_list("Product_SKU", filters={"name": self.name}, limit=1)
         if product_exists:
-            # Sản phẩm đã tồn tại
-            # custom_field = self.get('custom_field')
-            # custom_data = json.loads(custom_field)
-            # product_id_older = custom_data.get('product_id')
             self.update_product()
         else:
             # Kiểm tra và thêm sản phẩm
@@ -30,7 +26,7 @@ class Product(Document):
         RECOGNITION_API_KEY: str = '00000000-0000-0000-0000-000000000002'
         deep_vision: DeepVision = DeepVision()
         product_recognition: ProductRecognitionService = deep_vision.init_product_recognition_service(RECOGNITION_API_KEY)
-        collection_name = 'VGM_Product'
+        collection_name = 'VGM_Audits_Product'
         custom_field = json.loads(self.get('custom_field'))
         if custom_field is None:
             self.check_and_add_product()
@@ -42,7 +38,7 @@ class Product(Document):
                 products: Products = product_recognition.get_products()
                 products.update_by_id(collection_name, product_id_ai, self.product_name)
                 # Lien he tac gia de hieu chi tiet
-                imageSourceDBs = frappe.get_all("Product_Image", filters={"parent": self.name}, fields=["custom_field", "name", "uri_image"])
+                imageSourceDBs = frappe.get_all("ProductImage_SKU", filters={"parent": self.name}, fields=["custom_field", "name", "uri_image"])
                 for index, photo in enumerate(self.photos):
                     if not hasattr(photo, "custom_field") or photo.custom_field is None:
                         # photo["custom_field"] = "your_value"
@@ -64,7 +60,7 @@ class Product(Document):
         # Lấy đường dẫn của các hình ảnh từ table
         base_url = frappe.utils.get_request_site_address()
         image_paths = [base_url + photo.uri_image for photo in self.photos]
-        collection_name = 'VGM_Product'
+        collection_name = 'VGM_Audits_Product'
         product_id = str(uuid.uuid4())
         image_ids = [str(uuid.uuid4())]
 

@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2023-12-30 15:19:18.080312",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "scenario_code",
+  "product_code",
+  "retail_code",
+  "product_inventory",
+  "product_count",
+  "photos_display"
+ ],
+ "fields": [
+  {
+   "fieldname": "scenario_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Scenario",
+   "options": "Scenario_SKU"
+  },
+  {
+   "fieldname": "product_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Product",
+   "options": "Product_SKU"
+  },
+  {
+   "fieldname": "retail_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Retail",
+   "options": "Retail_Audit"
+  },
+  {
+   "fieldname": "product_inventory",
+   "fieldtype": "Int",
+   "label": "Product Inventory"
+  },
+  {
+   "fieldname": "product_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Product Count",
+   "read_only": 1
+  },
+  {
+   "fieldname": "photos_display",
+   "fieldtype": "Attach Image",
+   "label": "Photos Display"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-08 01:33:10.348177",
+ "modified_by": "Administrator",
+ "module": "VGM",
+ "name": "ReportScenario_SKU",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

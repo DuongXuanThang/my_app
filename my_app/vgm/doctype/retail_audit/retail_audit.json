@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2023-12-29 09:39:00.239534",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "retail_code",
+  "retail_name",
+  "retail_address",
+  "longitutue",
+  "latitude",
+  "retail_owner",
+  "phone_number",
+  "user_supervisor",
+  "scenario_sku",
+  "scenario_asset",
+  "scenario_posm"
+ ],
+ "fields": [
+  {
+   "fieldname": "retail_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Retail Code"
+  },
+  {
+   "fieldname": "retail_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Retail Name"
+  },
+  {
+   "fieldname": "retail_address",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Retail Address"
+  },
+  {
+   "fieldname": "longitutue",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Longitute"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Latitute"
+  },
+  {
+   "fieldname": "retail_owner",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Retail Owner"
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Phone Number"
+  },
+  {
+   "fieldname": "user_supervisor",
+   "fieldtype": "Link",
+   "label": "User Supervisor",
+   "options": "User"
+  },
+  {
+   "fieldname": "scenario_sku",
+   "fieldtype": "Table",
+   "label": "Scenario SKU",
+   "options": "ScenarioProductSKU_Link"
+  },
+  {
+   "fieldname": "scenario_asset",
+   "fieldtype": "Table",
+   "label": "Scenario Asset",
+   "options": "ScenarioAsset_Link"
+  },
+  {
+   "fieldname": "scenario_posm",
+   "fieldtype": "Table",
+   "label": "Scenario POSM",
+   "options": "ScenarioPOSM_Link"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-09 02:20:13.398262",
+ "modified_by": "Administrator",
+ "module": "VGM",
+ "name": "Retail_Audit",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "retail_name"
+}

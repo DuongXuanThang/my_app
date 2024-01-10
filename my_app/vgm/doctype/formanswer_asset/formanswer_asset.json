@@ -1,0 +1,53 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2023-12-30 15:47:17.592663",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "asset_name",
+  "asset_count",
+  "asset_status_quo",
+  "asset_image"
+ ],
+ "fields": [
+  {
+   "fieldname": "asset_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Asset Name"
+  },
+  {
+   "fieldname": "asset_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Asset Count"
+  },
+  {
+   "fieldname": "asset_status_quo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Asset Status Quo"
+  },
+  {
+   "fieldname": "asset_image",
+   "fieldtype": "Attach Image",
+   "label": "Asset Image"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-01-03 08:07:31.145631",
+ "modified_by": "Administrator",
+ "module": "VGM",
+ "name": "FormAnswer_Asset",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

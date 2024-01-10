@@ -1,0 +1,92 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2024-01-09 02:59:00.431579",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "retail",
+  "checkin_date",
+  "checkout_date",
+  "check_longitude",
+  "check_latitude",
+  "report_product",
+  "report_asset",
+  "report_posm"
+ ],
+ "fields": [
+  {
+   "fieldname": "retail",
+   "fieldtype": "Link",
+   "label": "Retail",
+   "options": "Retail_Audit",
+   "unique": 1
+  },
+  {
+   "fieldname": "checkin_date",
+   "fieldtype": "Datetime",
+   "label": "Check In Date"
+  },
+  {
+   "fieldname": "checkout_date",
+   "fieldtype": "Datetime",
+   "label": "Check Out Date"
+  },
+  {
+   "fieldname": "check_longitude",
+   "fieldtype": "Data",
+   "label": "Check Longitude"
+  },
+  {
+   "fieldname": "check_latitude",
+   "fieldtype": "Data",
+   "label": "Check Latitude"
+  },
+  {
+   "fieldname": "report_product",
+   "fieldtype": "Table",
+   "label": "Report Product",
+   "options": "ReportProduct_SKU"
+  },
+  {
+   "fieldname": "report_asset",
+   "fieldtype": "Table",
+   "label": "Report Asset",
+   "options": "ReportAsset"
+  },
+  {
+   "fieldname": "report_posm",
+   "fieldtype": "Table",
+   "label": "Report POSM",
+   "options": "ReportPOSM"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-09 04:51:55.609374",
+ "modified_by": "Administrator",
+ "module": "VGM",
+ "name": "DashboardRetail",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

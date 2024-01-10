@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2023-12-26 01:48:18.103452",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "scenario_name",
+  "description",
+  "last_updated",
+  "user",
+  "products",
+  "form_question"
+ ],
+ "fields": [
+  {
+   "fieldname": "scenario_name",
+   "fieldtype": "Data",
+   "label": "Scenario Name"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description"
+  },
+  {
+   "fieldname": "last_updated",
+   "fieldtype": "Datetime",
+   "label": "Lastupdated"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "fieldname": "products",
+   "fieldtype": "Table",
+   "label": "Products",
+   "options": "ProductLink"
+  },
+  {
+   "fieldname": "form_question",
+   "fieldtype": "Table",
+   "label": "FormQuestion",
+   "options": "FormQuestion"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-26 01:48:18.103452",
+ "modified_by": "Administrator",
+ "module": "VGM",
+ "name": "Scenario",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "scenario_name"
+}

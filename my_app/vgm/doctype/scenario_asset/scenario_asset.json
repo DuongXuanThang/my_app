@@ -1,27 +1,42 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2023-11-30 21:19:52.799378",
+ "autoname": "hash",
+ "creation": "2023-12-30 15:43:19.469791",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "data_test"
+  "scenario_name",
+  "description",
+  "assets"
  ],
  "fields": [
   {
-   "fieldname": "data_test",
+   "fieldname": "scenario_name",
    "fieldtype": "Data",
-   "label": "DATA TEST"
+   "label": "Scenario Name"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description"
+  },
+  {
+   "fieldname": "assets",
+   "fieldtype": "Table",
+   "label": "Assets",
+   "options": "Assets_Link"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-30 21:19:52.799378",
+ "modified": "2024-01-03 03:06:25.578268",
  "modified_by": "Administrator",
  "module": "VGM",
- "name": "test",
+ "name": "Scenario_Asset",
+ "naming_rule": "Random",
  "owner": "Administrator",
  "permissions": [
   {
@@ -37,7 +52,9 @@
    "write": 1
   }
  ],
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "scenario_name"
 }

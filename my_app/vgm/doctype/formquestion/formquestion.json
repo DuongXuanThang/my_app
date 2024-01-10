@@ -1,0 +1,45 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2023-12-26 01:45:31.670984",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "question_text",
+  "question_type",
+  "question_value"
+ ],
+ "fields": [
+  {
+   "fieldname": "question_text",
+   "fieldtype": "Data",
+   "label": "Question Text"
+  },
+  {
+   "fieldname": "question_type",
+   "fieldtype": "Select",
+   "label": "Question Type",
+   "options": "Text\nNumber\nYesNo"
+  },
+  {
+   "fieldname": "question_value",
+   "fieldtype": "Data",
+   "label": "Question Value"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-12-26 01:45:31.670984",
+ "modified_by": "Administrator",
+ "module": "VGM",
+ "name": "FormQuestion",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

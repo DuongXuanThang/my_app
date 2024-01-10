@@ -1,0 +1,38 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2023-12-30 15:32:46.714387",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "uri_image",
+  "custom_field"
+ ],
+ "fields": [
+  {
+   "fieldname": "uri_image",
+   "fieldtype": "Attach Image",
+   "label": "Uri Image"
+  },
+  {
+   "fieldname": "custom_field",
+   "fieldtype": "JSON",
+   "label": "Custom Field"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-01-03 03:05:56.349996",
+ "modified_by": "Administrator",
+ "module": "VGM",
+ "name": "Assets_Image",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

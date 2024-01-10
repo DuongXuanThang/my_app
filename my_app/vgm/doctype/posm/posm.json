@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2023-12-30 16:22:00.277461",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "posm_code",
+  "posm_name",
+  "posm_description",
+  "photos",
+  "custom_field"
+ ],
+ "fields": [
+  {
+   "fieldname": "posm_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "POSM Code"
+  },
+  {
+   "fieldname": "posm_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "POSM Name"
+  },
+  {
+   "fieldname": "photos",
+   "fieldtype": "Table",
+   "label": "Photos",
+   "options": "POSM_Image"
+  },
+  {
+   "fieldname": "custom_field",
+   "fieldtype": "JSON",
+   "label": "Custom Field"
+  },
+  {
+   "fieldname": "posm_description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-09 01:39:30.007316",
+ "modified_by": "Administrator",
+ "module": "VGM",
+ "name": "POSM",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "posm_name"
+}

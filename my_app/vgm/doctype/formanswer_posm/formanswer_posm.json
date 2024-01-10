@@ -1,0 +1,44 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2023-12-30 16:31:36.668185",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "posm_name",
+  "display_location",
+  "image"
+ ],
+ "fields": [
+  {
+   "fieldname": "posm_name",
+   "fieldtype": "Data",
+   "label": "POSM Name"
+  },
+  {
+   "fieldname": "display_location",
+   "fieldtype": "Data",
+   "label": "Display Location"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-01-03 03:09:28.408674",
+ "modified_by": "Administrator",
+ "module": "VGM",
+ "name": "FormAnswer_POSM",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
