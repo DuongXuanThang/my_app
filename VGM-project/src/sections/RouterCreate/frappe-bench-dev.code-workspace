@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../.."
+		},
+		{
+			"path": "../../../../../../../react"
+		},
+		{
+			"path": "../../../../../../../frappe-bench-hd"
+		},
+		{
+			"path": "../../../../../../../Downloads/Minimal_TypeScript_v5.4.0/vite-ts/src"
+		},
+		{
+			"path": "../../../../../../../Downloads/Minimal_TypeScript_v5.4.0/vite-ts"
+		},
+		{
+			"path": "../../../../../../../Downloads/Minimal_TypeScript_v5.4.0"
+		},
+		{
+			"path": "../../../../../../../design_pattern"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "react"
+	}
+}

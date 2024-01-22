@@ -61,10 +61,10 @@ def login(**kwargs):
         device_name = kwargs.get('device_name')
         device_id = kwargs.get('device_id')
         login_manager = LoginManager()
-        
         login_manager.authenticate(usr, pwd)
-        validate_employee(login_manager.user)
+        # validate_employee(login_manager.user)
         login_manager.post_login()
+        
         if frappe.response["message"] == "Logged In":
             emp_data = get_employee_by_user(login_manager.user, fields=[
                                             "name", "email"])
@@ -81,8 +81,9 @@ def login(**kwargs):
             "key_details": generate_key(login_manager.user),
         })
 
-    except frappe.AuthenticationError:
+    except frappe.AuthenticationError as e:
         gen_response(404, "Thất bại", [])
+        frappe.log_error("Authentication Error: {0}".format(e))
         # exception_handel(e)
         return None
     except Exception as e:

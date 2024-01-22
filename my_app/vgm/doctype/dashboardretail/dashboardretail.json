@@ -22,8 +22,7 @@
    "fieldname": "retail",
    "fieldtype": "Link",
    "label": "Retail",
-   "options": "Retail_Audit",
-   "unique": 1
+   "options": "Retail_Audit"
   },
   {
    "fieldname": "checkin_date",
@@ -66,7 +65,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-09 04:51:55.609374",
+ "modified": "2024-01-12 00:58:26.345828",
  "modified_by": "Administrator",
  "module": "VGM",
  "name": "DashboardRetail",

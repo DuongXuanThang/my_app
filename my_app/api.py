@@ -1,6 +1,7 @@
 import json
 import requests
 import frappe
+from frappe.utils.xlsxutils import make_xlsx
 from frappe.model.document import Document
 import sys
 import os
@@ -208,47 +209,70 @@ def add_report(**kwargs):
                 "product_count": report_product_data.get('product_count'),
                 # Các trường khác...
             })
-
-            # Lặp qua mảng photos và thêm từng đối tượng con vào mảng
-            for photo_data in report_product_data.get('photos', []):
-                # count_product = 0
-                booth_photo_product = frappe.get_doc({
-                    "doctype": "BoothPhotoProduct",
-                    "parentfield": "photos",
-                    "parenttype": "ReportProduct_SKU",
-                    "uri_image": photo_data.get('uri_image'), 
-                    # Các trường khác...
-                })
-                # image_path = base_url + photo_data.get('uri_image')
-                # product_name = report_product_data.get('product_name')
-                # response = recognition.count(collection_name, image_path)
-                # if response.get('status') == 'completed':
-                #     count_value = response.get('result', {}).get('count', {}).get(product_name)
-                #     if count_value is None:
-                #         count_product += 0
-                #     else:
-                #         count_product = count_product + count_value
-                # else:
-                #     count_product = count_product + 0 
-                # Thêm thằng con (BoothPhotoProduct) vào thằng con (ReportProduct_SKU)
+            
+            # count_product = 0
+            # # Lặp qua mảng photos và thêm từng đối tượng con vào mảng
+            # for photo_data in report_product_data.get('photos', []):
+            #     booth_photo_product = frappe.get_doc({
+            #         "doctype": "BoothPhotoProduct",
+            #         "parentfield": "photos",
+            #         "parenttype": "ReportProduct_SKU",
+            #         "uri_image": photo_data.get('uri_image'), 
+            #         # Các trường khác...
+            #     })
+            #     image_path = base_url + photo_data.get('uri_image')
+            #     product_name = report_product_data.get('product_name')
+            #     response = recognition.count(collection_name, image_path)
                 
-                report_product_sku.append("photos", booth_photo_product)
-            # Cập nhật giá trị product_count dựa vào count_product    
+            #     if response.get('status') == 'completed':
+            #         count_value = response.get('result', {}).get('count', {}).get(product_name)
+            #         if count_value is not None:
+            #             count_product += count_value 
+            #     else:
+            #         count_product = count_product + 0 
+            #     # Thêm thằng con (BoothPhotoProduct) vào thằng con (ReportProduct_SKU)
+                
+            #     report_product_sku.append("photos", booth_photo_product)
+            # Cập nhật giá trị product_count dựa vào count_product
+            
             # report_product_sku.product_count = count_product
             # Thêm thằng con (ReportProduct_SKU) vào thằng cha (DashboardRetail)
             parent_doc.append("report_product", report_product_sku)
-
+        
         # Lưu bản ghi của thằng cha
         parent_doc.insert()
         # Lấy ID của đối tượng DashboardRetail mới được tạo
         dashboard_retail_id = parent_doc.name
-        # Lấy đối tượng DashboardRetail sau khi đã được thêm vào database
-        dashboard_retail_doc = frappe.get_doc("DashboardRetail", dashboard_retail_id)
+        # # Lấy đối tượng DashboardRetail sau khi đã được thêm vào database
+        # dashboard_retail_doc = frappe.get_doc("DashboardRetail", dashboard_retail_id)
         # Trả về ID của đối tượng DashboardRetail mới được tạo
-        return {"success": True, "dashboard_retail": dashboard_retail_doc.as_dict()}
+        return {"success": True, "dashboard_retail_id": dashboard_retail_id}
         # return {"success": True, "dashboard_retail_id": parent_doc.name}
     except frappe.exceptions.ValidationError as e:
         return {"success": False, "message": _("Validation Error: {0}".format(str(e)))}
     except Exception as e:
         return {"success": False, "message": _("An error occurred: {0}".format(str(e)))}
     
+@frappe.whitelist(methods=["POST"])
+def deleteList(*args,**kwargs):
+    try:
+        # Chuyển đổi ids từ chuỗi JSON thành danh sách Python
+        ids_list = frappe.parse_json(kwargs.get('items'))
+
+        # Lặp qua danh sách ids và thực hiện xóa
+        for id in ids_list:
+            # Thực hiện xóa cho mỗi id
+            frappe.delete_doc(kwargs.get('doctype'), id)
+
+        return {"status": "success", "message": "Deleted successfully"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+@frappe.whitelist(methods=["GET"])   
+def export_query( **kwargs ):
+
+# Lấy tất cả dữ liệu của Product_SKU
+   fields = frappe.get_all('Product_SKU', fields=['*'])
+
+# Xuất dữ liệu sang file Excel
+   filename = 'product_skus.xlsx'
+   frappe.desk.reportview.export_query(filters=None, fields=fields, filename=filename,file_format_type='Excel')

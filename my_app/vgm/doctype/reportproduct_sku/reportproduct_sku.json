@@ -10,7 +10,7 @@
   "product_name",
   "scenario_name",
   "product_count",
-  "photos"
+  "uri_images"
  ],
  "fields": [
   {
@@ -32,16 +32,15 @@
    "label": "Product Count"
   },
   {
-   "fieldname": "photos",
-   "fieldtype": "Table",
-   "label": "Photos",
-   "options": "BoothPhotoProduct"
+   "fieldname": "uri_images",
+   "fieldtype": "JSON",
+   "label": "Uri Images"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-01-09 07:10:42.712641",
+ "modified": "2024-01-12 00:55:05.030128",
  "modified_by": "Administrator",
  "module": "VGM",
  "name": "ReportProduct_SKU",

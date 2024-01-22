@@ -1,6 +1,5 @@
 {
  "actions": [],
- "allow_rename": 1,
  "autoname": "hash",
  "creation": "2023-12-29 08:55:25.820783",
  "default_view": "List",
@@ -52,7 +51,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-09 01:35:15.894393",
+ "modified": "2024-01-18 23:37:20.044554",
  "modified_by": "Administrator",
  "module": "VGM",
  "name": "Product_SKU",
@@ -77,5 +76,8 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "product_name"
+ "title_field": "product_name",
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
 }
