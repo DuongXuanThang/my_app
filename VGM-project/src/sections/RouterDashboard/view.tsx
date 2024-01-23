@@ -1,91 +1,160 @@
-import { IoIosMenu } from "react-icons/io";
-import { VscAdd } from "react-icons/vsc";
-import { LuUploadCloud } from "react-icons/lu";
-import { LiaDownloadSolid } from "react-icons/lia";
-import { LuFilter, LuFilterX } from "react-icons/lu";
-import { PiSortAscendingBold } from "react-icons/pi";
-import { Button, Input, Select } from "antd";
-import React, { useState } from "react";
-import { FormItemCustom } from "../../components/form-item";
-import { HeaderPage, TableCustom } from "../../components";
 
+import React, { useState, useEffect,useRef } from 'react';
+import { Button, Table , Tooltip ,Input ,Space } from 'antd';
+import type { GetRef, TableColumnsType, TableColumnType } from 'antd';
+import  {AxiosService} from '../../services/server';
+import type { FilterDropdownProps } from 'antd/es/table/interface';
+// import Highlighter from 'react-highlight-words';
+import {
+  EnvironmentOutlined,
+  SearchOutlined
+} from '@ant-design/icons';
 interface DataType {
   key: React.Key;
-  codeRouter: string;
-  nameRouter: string;
-  nvbh: string;
-  status: string;
-  created: string;
-  usercreated: string;
-  updated: string;
-  userupdated: string;
+  name: string;
+  retail: string;
+  check_in_date: string;
+  check_latitude: string;
+  check_longitude: string;
 }
-
-const columns = [
-  {
-    title: "Mã tuyến",
-    dataIndex: "codeRouter",
-  },
-  {
-    title: "Tên tuyến",
-    dataIndex: "nameRouter",
-  },
-  {
-    title: "NVBH",
-    dataIndex: "nvbh",
-  },
-  {
-    title: "Trạng thái",
-    dataIndex: "status",
-  },
-  {
-    title: "Ngày tạo",
-    dataIndex: "created",
-  },
-  {
-    title: "Người tạo",
-    dataIndex: "usercreated",
-  },
-  {
-    title: "Ngày cập nhật",
-    dataIndex: "updated",
-  },
-  {
-    title: "Người cập nhật",
-    dataIndex: "userupdated",
-  },
-];
-
-const data: DataType[] = [
-  {
-    key: "1",
-    codeRouter: "John",
-    nameRouter: "Brown",
-    nvbh: "unasd",
-    status: "New York No. 1 Lake Park",
-    created: "222",
-    usercreated: "12313",
-    updated: "123",
-    userupdated: "123123",
-  },
-  {
-    key: "2",
-    codeRouter: "John",
-    nameRouter: "Brown",
-    nvbh: "unasd",
-    status: "New York No. 1 Lake Park",
-    created: "222",
-    usercreated: "12313",
-    updated: "123",
-    userupdated: "123123",
-  },
-];
+type InputRef = GetRef<typeof Input>;
+type DataIndex = keyof DataType;
 
 export default function RouterDashboard() {
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef<InputRef>(null);
+
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: FilterDropdownProps['confirm'],
+    dataIndex: DataIndex,
+  ) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText('');
+  };
+
+  const getColumnSearchProps = (dataIndex: DataIndex): TableColumnType<DataType> => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        text
+      ) : (
+        text
+      ),
+  });
+
+  const [data, setData] = useState<DataType[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await AxiosService.get('/api/resource/DashboardRetail?fields=["*"]');
+        // Kiểm tra xem kết quả từ API có chứa dữ liệu không
+        if (response && response.data) {
+          // Thêm key cho mỗi phần tử trong mảng, sử dụng trường 'name'
+          const dataWithKey: DataType[] = response.data.map((item: DataType) => {
+            const location =  item.check_latitude + "" + item.check_longitude
+           
+        
+            return {
+              ...item,
+              key: item.name,
+              location: location,
+            };
+          });
+          setData(dataWithKey);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  const start = () => {
+    setLoading(true);
+    // ajax request after empty completing
+    setTimeout(() => {
+      setSelectedRowKeys([]);
+      setLoading(false);
+    }, 1000);
+  };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -93,157 +162,62 @@ export default function RouterDashboard() {
     selectedRowKeys,
     onChange: onSelectChange,
   };
+  const hasSelected = selectedRowKeys.length > 0;
 
-  const onChange = (value: string) => {
-    console.log(`selected ${value}`);
-  };
-
-  const onSearch = (value: string) => {
-    console.log("search:", value);
-  };
-
-  const filterOption = (
-    input: string,
-    option?: { label: string; value: string }
-  ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const columns: TableColumnsType<DataType> = [
+    {
+      title: 'ID',
+      dataIndex: 'name',
+      ...getColumnSearchProps('name'),
+    },
+    {
+      title: 'Mã điểm bán',
+      dataIndex: 'retail',
+      render: (retail) => (
+        <Tooltip placement="topLeft" title={retail}>
+          {retail}
+        </Tooltip>
+      ),
+    },
+    {
+      title: 'Vị trí',
+      dataIndex: 'location',
+      render: (location) => (
+        <Tooltip title={`${location}`}>
+          <EnvironmentOutlined style={{ color: 'green' , cursor: 'pointer' }} />
+        </Tooltip>
+      ),
+      onCell: () => ({
+        onClick: (event) => {
+          // Xử lý sự kiện khi người dùng click vào cột 'Vị trí'
+          // event.target chứa thông tin về đối tượng HTML đã được click
+          console.log('Location clicked:', event.target);
+          // Thêm logic xử lý click ở đây
+        },
+      }),
+    },
+    {
+      title: 'Ngày checkin',
+      dataIndex: 'check_in_date',
+    },
+    {
+      title: 'Ngày tạo',
+      dataIndex: 'creation',
+    },
+  
+  ];
   return (
-    <>
-      <HeaderPage
-        title="Quản lý tuyến"
-        buttons={[
-          {
-            label: "Xuất excel",
-            icon: <LiaDownloadSolid className="text-xl" />,
-            size: "20px",
-            className: "flex items-center mr-2",
-          },
-          {
-            label: "Nhập excel",
-            icon: <LuUploadCloud className="text-xl" />,
-            size: "20px",
-            className: "flex items-center mr-2",
-          },
-          {
-            label: "Thêm mới",
-            type: "primary",
-            icon: <VscAdd className="text-xl" />,
-            size: "20px",
-            className: "flex items-center",
-          },
-        ]}
-      />
-
-      <div className="bg-[#f9fafa]">
-        <div className="mx-2 pt-5 pb-10">
-          {/* <div className="flex flex-wrap justify-between">
-            <div className="flex justify-center items-center">
-              <span className="mr-2">
-                <IoIosMenu style={{ fontSize: "24px" }} />
-              </span>
-              <h1 className="text-2xl font-semibold leading-[21px]">
-                Quản lý tuyến
-              </h1>
-            </div>
-            <div className="flex mb-2">
-              <Button
-                className="flex items-center !text-[13px] !leading-[21px] !font-normal !text-[#212B36] !h-9"
-                size={"large"}
-                icon={<LiaDownloadSolid style={{ fontSize: "20px" }} />}
-              >
-                Xuất excel
-              </Button>
-              <Button
-                className="flex items-center !text-[13px] !leading-[21px] !font-normal !text-[#212B36] ml-3 !h-9"
-                size={"large"}
-                icon={<LuUploadCloud style={{ fontSize: "20px" }} />}
-              >
-                Nhập excel
-              </Button>
-              <Button
-                className="bg-[#1877F2] ml-3 text-white flex items-center !text-[13px] !leading-[21px] !font-medium !h-9"
-                size={"large"}
-                icon={<VscAdd style={{ fontSize: "20px" }} />}
-              >
-                Thêm mới
-              </Button>
-            </div>
-          </div> */}
-
-          <div className="pt-5">
-            <div className="h-auto bg-white py-7 px-4 rounded-lg">
-              <div className="flex flex-wrap justify-between items-center">
-                <div className="flex justify-center flex-wrap items-center">
-                  <Input
-                    className="w-[200px] mr-3 bg-[#F4F6F8] placeholder:text-[#212B36] border-none"
-                    placeholder="Tuyến"
-                  />
-                  <Input
-                    className="w-[200px] mr-3 bg-[#F4F6F8] placeholder:text-[#212B36] border-none"
-                    placeholder="Nhân viên bán hàng"
-                  />
-
-                  <FormItemCustom className="w-[150px] border-none">
-                    <Select
-                      className="!bg-[#F4F6F8] options:bg-[#F4F6F8]"
-                      optionFilterProp="children"
-                      onChange={onChange}
-                      onSearch={onSearch}
-                      filterOption={filterOption}
-                      defaultValue=""
-                      options={[
-                        {
-                          value: "",
-                          label: "Trạng thái",
-                        },
-                        {
-                          value: "A",
-                          label: "Hoạt động",
-                        },
-                        {
-                          value: "B",
-                          label: "Khóa",
-                        },
-                      ]}
-                    />
-                  </FormItemCustom>
-                </div>
-
-                <div className="flex flex-wrap items-center">
-                  <div className="flex justify-center items-center mr-4">
-                    <Button
-                      className="flex items-center text-nowrap !text-[13px] !leading-[21px] !font-normal  border-r-[0.1px] rounded-r-none h-[32px]"
-                      icon={<LuFilter style={{ fontSize: "20px" }} />}
-                    >
-                      Filter
-                    </Button>
-                    <Button className="border-l-[0.1px] rounded-l-none h-[32px]">
-                      <LuFilterX style={{ fontSize: "20px" }} />
-                    </Button>
-                  </div>
-                  <div className="flex justify-center items-center rounded-md">
-                    <Button className="border-r-[0.1px] rounded-r-none">
-                      <PiSortAscendingBold style={{ fontSize: "20px" }} />
-                    </Button>
-                    <Button className="border-l-[0.1px] rounded-l-none">
-                      Last update on
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-5">
-                <div>
-                  <TableCustom
-                    rowSelection={rowSelection}
-                    columns={columns}
-                    dataSource={data}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
+          Reload
+        </Button>   
+        <span style={{ marginLeft: 8 }}>
+          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+        </span>
       </div>
-    </>
+      <Table rowSelection={rowSelection}  columns={columns} dataSource={data} />
+    </div>
   );
+  
 }

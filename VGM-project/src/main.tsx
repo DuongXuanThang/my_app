@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root')!)
 
 root.render(
   <HelmetProvider>
-    <FrappeProvider socketPort={import.meta.env.VITE_SOCKET_PORT ?? ''}>
+    <FrappeProvider >
     <BrowserRouter basename={BASE_URL}>
       <Suspense>
         <App />
