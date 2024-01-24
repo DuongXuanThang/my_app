@@ -1,13 +1,17 @@
 
 import React, { useState, useEffect,useRef } from 'react';
-import { Button, Table , Tooltip ,Input ,Space } from 'antd';
+import { Button, Table , Tooltip ,Input ,Space ,Modal} from 'antd';
 import type { GetRef, TableColumnsType, TableColumnType } from 'antd';
 import  {AxiosService} from '../../services/server';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
 // import Highlighter from 'react-highlight-words';
 import {
   EnvironmentOutlined,
-  SearchOutlined
+  SearchOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+  FileExcelOutlined,
+  EditOutlined
 } from '@ant-design/icons';
 interface DataType {
   key: React.Key;
@@ -191,7 +195,7 @@ export default function RouterDashboard() {
         onClick: (event) => {
           // Xử lý sự kiện khi người dùng click vào cột 'Vị trí'
           // event.target chứa thông tin về đối tượng HTML đã được click
-          console.log('Location clicked:', event.target);
+          console.log('123');
           // Thêm logic xử lý click ở đây
         },
       }),
@@ -204,20 +208,61 @@ export default function RouterDashboard() {
       title: 'Ngày tạo',
       dataIndex: 'creation',
     },
+    {
+      title: '',
+      dataIndex: '',
+      render: () => (
+        <Button icon={<EditOutlined />}>
+        </Button>
+      ),
+    },
   
   ];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div>
-      <div style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
-          Reload
-        </Button>   
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-        </span>
-      </div>
-      <Table rowSelection={rowSelection}  columns={columns} dataSource={data} />
+   <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <div>
+    {hasSelected && (
+      <Button type="primary" danger ghost onClick={start} loading={loading} icon={<DeleteOutlined />}>
+        Xóa
+      </Button>
+    )}
+    <span style={{ marginLeft: 8 }}>
+      {hasSelected ? `Đã chọn ${selectedRowKeys.length} báo cáo` : ''}
+    </span>
+  </div>
+  <div style={{ display: 'flex' }}>
+    <div style={{ paddingRight: '10px' }}>
+    <Button type="primary" icon={<FileExcelOutlined />}>
+      Tãi xuống
+    </Button>
     </div>
+    <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
+      Thêm mới
+    </Button>
+  </div>
+</div>
+
+    <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+    <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+  <p>Some contents...</p>
+  <p>Some contents...</p>
+  <p>Some contents...</p>
+</Modal>
+  </div>
   );
-  
+
 }
