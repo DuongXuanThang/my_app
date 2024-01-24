@@ -1,0 +1,7 @@
+.custom-scroll .ant-table-scrollbar {
+    width: 6px; /* Đặt chiều rộng thanh cuộn */
+  }
+  
+  .custom-scroll .ant-table-scrollbar-thumb {
+    width: 6px; /* Đặt chiều rộng cảm ứng thanh cuộn */
+  }

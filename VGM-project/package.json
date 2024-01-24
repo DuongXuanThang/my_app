@@ -23,6 +23,7 @@
     "node-sass": "^9.0.0",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
+    "react-barcode": "^1.4.6",
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.4",
     "react-icons": "^4.12.0",

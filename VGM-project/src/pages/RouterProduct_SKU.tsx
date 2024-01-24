@@ -1,15 +1,15 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import RouterDashboard from '@/sections/RouterDashboard/view';
+import Product_SKU from '@/sections/RouterProduct_SKU/view';
 
 // ----------------------------------------------------------------------
 export default function Page() {
   return (
     <>
       <Helmet>
-        <title>BÁO CÁO</title>
+        <title>Sản phẩm</title>
       </Helmet>
-      <RouterDashboard />
+      <Product_SKU />
     </>
   );
 }

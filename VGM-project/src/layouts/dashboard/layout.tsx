@@ -44,7 +44,7 @@ export default function DashboardLayout({children}:Props) {
     getItem('Báo cáo', '1', <PieChartOutlined />, () => handleItemClick('/')),
     getItem('Nhân viên', '2', <UserOutlined />, () => handleItemClick('/router-control')),
     getItem('Danh mục', 'sub1', <BarsOutlined />, undefined, [
-      getItem('Sản phẩm', '3', undefined,() => {console.log('123')}),
+      getItem('Sản phẩm', '3', undefined,() => handleItemClick('/router-product_sku')),
       getItem('Tài sản', '4', undefined, () => {console.log('123')}),
       getItem('Vật phẩm trưng bày', '5', undefined, () => {console.log('123')}),
     ]),
@@ -78,7 +78,6 @@ type MenuItem = Required<MenuProps>['items'][number];
       <Content style={{ margin: '0 16px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Báo cáo</Breadcrumb.Item>
-          <Breadcrumb.Item>Bill</Breadcrumb.Item>
         </Breadcrumb>
         <div
           style={{

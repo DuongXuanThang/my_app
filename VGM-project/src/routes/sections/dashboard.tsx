@@ -8,7 +8,8 @@ import {LoadingScreen} from '@/components'
 
 const RouterControl = lazy(()=> import('@/pages/RouterControl'))
 const RouterCreate = lazy(()=> import('@/pages/RouterCreate'))
-const RouterDashboard = lazy(()=> import('@/pages/RouterDashboard'))
+const RouterReportDetail= lazy(()=> import('@/pages/RouteReportDetail'))
+const RouterProduct_SKU= lazy(()=> import('@/pages/RouterProduct_SKU'))
 const RouterDetail = lazy(()=> import('@/pages/RouterDetail'))
 const RouterEmployee = lazy(()=> import('@/pages/RouterEmployee'))
 const SettingDMS = lazy(()=> import('@/pages/SettingDMS'))
@@ -24,10 +25,13 @@ export const dashboardRoutes = [
         ),
         children: [
             {
-                index: true,element: <RouterDashboard/>
+                index: true,element: <RouterReportDetail/>
             },
             {
                 path: 'router-control',element: <RouterControl/>
+            },
+            {
+                path: 'router-product_sku',element: <RouterProduct_SKU/>
             },
             
             {
