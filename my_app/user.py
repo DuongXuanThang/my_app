@@ -9,7 +9,7 @@ def update_profile(**kwargs):
     try:
         employee_id = get_employee_id()
         date_format = '%Y/%m/%d'
-        fieldAccess = ["full_name"]
+        fieldAccess = ["full_name","birth_date"]
         del kwargs['cmd']
         
         for field, value in dict(kwargs).items():
@@ -19,11 +19,11 @@ def update_profile(**kwargs):
                 frappe.local.response['http_status_code'] = 404
                 frappe.response["result"] = []
                 return None
-            elif field == 'date_of_birth':
-                dob = int(kwargs.get('date_of_birth'))
-                date_of_birth = int(kwargs.get('date_of_birth'))
+            elif field == 'birth_date':
+                dob = int(kwargs.get('birth_date'))
+                date_of_birth = int(kwargs.get('birth_date'))
                 date_of_birth = datetime.fromtimestamp(date_of_birth).strftime(date_format)
-                kwargs['date_of_birth'] = date_of_birth
+                kwargs['birth_date'] = date_of_birth
                 
             elif field == 'full_name':
                 if kwargs.get("full_name"):
@@ -44,8 +44,6 @@ def update_profile(**kwargs):
                 face_image = kwargs.get("image")
                 name_image = "avarta_"+employee_id
                 kwargs['image'] = post_image(name_image, face_image, "User", employee_id)
-                
-        print(employee_id)
         if frappe.db.exists("User", employee_id, cache=True):
             doc = frappe.get_doc('User', employee_id)
             for field, value in dict(kwargs).items():
@@ -69,7 +67,7 @@ def get_employee_info():
         if not employee_id:
             gen_response(404 ,'Not found user',[])
             return 
-        user_info = get_info_employee(name= employee_id,fields=["full_name", "email","first_name","username"])
+        user_info = get_info_employee(name= employee_id,fields=["*"])
         # user_info['date_of_birth'] = user_info['date_of_birth']
         # if user_info['image']:
         #     user_info['image'] = validate_image(user_info['image'])

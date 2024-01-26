@@ -1,0 +1,15 @@
+{
+  "name": "my_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cd Audit && yarn dev",
+    "build": "cd Audit && yarn build",
+    "postinstall": "cd Audit && install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

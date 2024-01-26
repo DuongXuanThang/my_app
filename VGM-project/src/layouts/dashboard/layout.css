@@ -1,0 +1,9 @@
+.demo-logo-vertical {
+    height: 32px;
+    margin: 16px;
+    background: rgba(235, 7, 7, 0.2);
+    border-radius: 6px;
+}
+body {
+    font-size: 12px;
+}

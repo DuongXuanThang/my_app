@@ -2,10 +2,11 @@
 import React, { useState, useEffect,useRef } from 'react';
 import { Button, Table , Tooltip ,Input ,Space ,Modal,Form, Upload,message,UploadFile} from 'antd';
 import type { GetRef, TableColumnsType, TableColumnType,UploadProps } from 'antd';
+import {TableCustom } from "../../components";
 import  {AxiosService} from '../../services/server';
 import { useForm } from 'antd/lib/form/Form';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
-import { useFrappeFileUpload } from 'frappe-react-sdk';
+import SVG from 'svg.js';
 // import Highlighter from 'react-highlight-words';
 import {
   SearchOutlined,
@@ -26,8 +27,11 @@ type InputRef = GetRef<typeof Input>;
 type DataIndex = keyof DataType;
 
 export default function Product_SKU() {
+  const barcodeRef = useRef(null);
+  const [barcode, setBarcode] = useState('');
   const [form] = useForm();
-  const [fileList, setFileList] = useState([]);
+  const [fileListUpload, setFileListUpload] = useState<[]>([]);
+  const [fileList, setFileList] = useState<[]>([]);
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -158,6 +162,9 @@ export default function Product_SKU() {
   
     fetchData();
   }, []);
+  useEffect(() => {
+    
+}, [barcode]);
   const deleteItem = () => {
     setLoading(true);
     // ajax request after empty completing
@@ -199,14 +206,6 @@ export default function Product_SKU() {
       render: (barcodeValue) => {
         return <div dangerouslySetInnerHTML={{ __html: barcodeValue }} />;
       },
-      onCell: () => ({
-        onClick: (event) => {
-          // Xử lý sự kiện khi người dùng click vào cột 'Vị trí'
-          // event.target chứa thông tin về đối tượng HTML đã được click
-          console.log('123');
-          // Thêm logic xử lý click ở đây
-        },
-      }),
     },
     {
       title: 'Mô tả',
@@ -234,14 +233,46 @@ export default function Product_SKU() {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
     const productCode = form.getFieldValue('productCode');
     const barCode = form.getFieldValue('barcode');
     const productName = form.getFieldValue('productName');
     const description = form.getFieldValue('description');
     const fileList = form.getFieldValue('fileList');
     console.log('File List:', fileList);
-    
+    let objparam = {
+      product_code : productCode,
+      product_name : productName,
+      product_description : description,
+      "docstatus": 0,
+      "doctype": "Product_SKU",
+      photos : []
+    }
+    const photoObjects = fileListUpload.map(file => ({
+      docstatus: 0,
+      doctype: 'ProductImage_SKU',
+      name: 'new-product_image-buhawsuxpf',
+      owner: file.owner,
+      parent: 'new-product-xjwkkysins',
+      parentfield: 'photos',
+      parenttype: 'Product_SKU',
+      uri_image: file.file_url
+    }));
+    objparam.photos.push(...photoObjects);
+    console.log(objparam);
+    let formData = new FormData();
+    const fields = {
+      doc:JSON.stringify(objparam),
+      action:"Save"
+  };
+
+  for (const [key, value] of Object.entries(fields)) {
+      formData.append(key, value);
+  }
+    const response = await AxiosService.post('api/method/frappe.desk.form.save.savedocs',formData);
+    console.log(response);
+    setFileListUpload([])
+    form.setFieldsValue({ 'fileList': fileListUpload });
     setFileList([]);
     setIsModalOpen(false);
     
@@ -262,17 +293,26 @@ export default function Product_SKU() {
     onRemove: (file) => {
     },
     beforeUpload: async (file) => {
-      let form_data = new FormData();
-      form_data.append('file', file);
-      form_data.append('is_private', '0');
-			form_data.append('folder', 'Home');
-      form_data.append('doctype', 'Product_SKU');
-      form_data.append('docname', 'new-image');
-      form_data.append('fieldname', 'uri_images');
-      const response = await AxiosService.post('/api/method/upload_file',form_data);
+      const formData = new FormData();
+      const fields = {
+          file,
+          is_private: '0',
+          folder: 'Home',
+          doctype: 'ProductImage_SKU',
+          docname: 'new-image',
+          fieldname: 'uri_images'
+      };
+  
+      for (const [key, value] of Object.entries(fields)) {
+          formData.append(key, value);
+      }
+      const response = await AxiosService.post('/api/method/upload_file',formData);
       console.log(response);
       if(response.message){
+        //setFileListUpload(prevFileList => [...prevFileList, response.message]);
+        fileListUpload.push(response.message)
         message.success('Tải ảnh thành công');
+       
       }else{
         message.error('Tải ảnh thất bại');
       }
@@ -282,9 +322,7 @@ export default function Product_SKU() {
   };
   const handleChange = (info : any) => {
     // Xử lý thông tin và cập nhật giá trị fileList
-    const files = info.fileList;
-    console.log(files);
-    //form.setFieldsValue({ 'fileList': files });
+    form.setFieldsValue({ 'fileList': fileListUpload });
   };
   return (
     <div>
@@ -311,20 +349,23 @@ export default function Product_SKU() {
   </div>
 </div>
 
-    <Table rowSelection={rowSelection} columns={columns} dataSource={data}   scroll={{ x: '100%', y: 670}} size="small"/>
-    <Modal title={isEditing ? "Sửa sản phẩm" : "Thêm mới sản phẩm"} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={700}>
-    <Form {...formItemLayout} form={form} variant="filled" style={{ maxWidth: 600 }}>
+    <TableCustom rowSelection={rowSelection} columns={columns} dataSource={data}   scroll={{ x: '100%', y: 670}} size="small"/>
+    <Modal destroyOnClose={true} title={isEditing ? "Sửa sản phẩm" : "Thêm mới sản phẩm"} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={700}>
+    <Form {...formItemLayout} form={form} preserve={false} variant="filled" style={{ maxWidth: 600 }}>
     <Form.Item label="Mã sản phẩm" name="productCode" rules={[{ required: true, message: 'Chưa nhập code!' }]}>
       <Input />
     </Form.Item>
-    <Form.Item label="Bar code" name="barcode" rules={[{ required: true, message: 'Chưa nhập code!' }]}>
-      <Input />
+    <Form.Item label="Bar code" name="inputbarcode" rules={[{ required: true, message: 'Chưa nhập code!' }]}>
+      <Input onChange={(e) => setBarcode(e.target.value)}/>
     </Form.Item>
-    <Form.Item label="Tên sản phẩm" name="Input" rules={[{ required: true, message: 'Chưa nhập tên sản phẩm!' }]}>
+    <Form.Item name="barcode" >
+     <div ref={barcodeRef}></div>
+    </Form.Item>
+    <Form.Item label="Tên sản phẩm" name="productName" rules={[{ required: true, message: 'Chưa nhập tên sản phẩm!' }]}>
       <Input />
     </Form.Item>
     <Form.Item  label="Mô tả"
-      name="TextArea" >
+      name="description" >
       <Input.TextArea />
     </Form.Item>
     <Form.Item label="Ảnh sản phẩm" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Chưa có ảnh sản phẩm!' }]}>

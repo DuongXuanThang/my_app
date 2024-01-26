@@ -5,6 +5,7 @@ const appStyles = `
   body {
     margin: 0;
     padding: 0;
+    font-size: 12px;
   }
   ::-webkit-scrollbar {
     width: 10px; /* Chiều rộng của thanh cuộn */

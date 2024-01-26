@@ -83,6 +83,7 @@ def get_user_id():
     return user_id
 
 def get_employee_id():
+    
     try:
         user_id = get_user_id()
         return get_employee_by_user(user_id).get("name")

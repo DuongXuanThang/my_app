@@ -2,17 +2,21 @@ import React from 'react'
 // import Header from './header'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './layout.css';
+
 import {
   BarsOutlined,
   EnvironmentOutlined,
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, Layout, Menu, theme ,Button} from 'antd';
 
-const {  Content, Sider } = Layout;
+const {Header,  Content, Sider } = Layout;
 type Props = {
   children: React.ReactNode
 }
@@ -68,12 +72,24 @@ type MenuItem = Required<MenuProps>['items'][number];
     // <div className='max-w-full w-[80%] mx-auto'><div  className="rounded-md">{children}</div></div>
     // </div>
     <Layout style={{ minHeight: '100vh' }}>
-    <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+    <Sider style={{ background: colorBgContainer }} trigger={null} collapsible collapsed={collapsed}>
       <div className="demo-logo-vertical" />
-      <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items}>
+      <Menu  defaultSelectedKeys={['1']} mode="inline" items={items}>
         </Menu>
     </Sider>
     <Layout>
+    <Header style={{ padding: 0, background: colorBgContainer }}>
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: '16px',
+              width: 64,
+              height: 64,
+            }}
+          />
+        </Header>
       {/* <Header style={{ padding: 0, background: colorBgContainer }} /> */}
       <Content style={{ margin: '0 16px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
