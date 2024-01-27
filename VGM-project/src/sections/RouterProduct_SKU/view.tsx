@@ -6,7 +6,8 @@ import {TableCustom } from "../../components";
 import  {AxiosService} from '../../services/server';
 import { useForm } from 'antd/lib/form/Form';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
-import SVG from 'svg.js';
+import JsBarcode from 'jsbarcode';
+
 // import Highlighter from 'react-highlight-words';
 import {
   SearchOutlined,
@@ -27,8 +28,7 @@ type InputRef = GetRef<typeof Input>;
 type DataIndex = keyof DataType;
 
 export default function Product_SKU() {
-  const barcodeRef = useRef(null);
-  const [barcode, setBarcode] = useState('');
+  const [barcodeValue, setBarcodeValue] = useState('');
   const [form] = useForm();
   const [fileListUpload, setFileListUpload] = useState<[]>([]);
   const [fileList, setFileList] = useState<[]>([]);
@@ -138,33 +138,29 @@ export default function Product_SKU() {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await AxiosService.get('/api/resource/Product_SKU?fields=["*"]');
-        // Kiểm tra xem kết quả từ API có chứa dữ liệu không
-        if (response && response.data) {
-          // Thêm key cho mỗi phần tử trong mảng, sử dụng trường 'name'
-          const dataWithKey: DataType[] = response.data.map((item: DataType) => {
-            return {
-              ...item,
-              key: item.name,
-            };
-          });
-          setData(dataWithKey);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
     fetchData();
   }, []);
-  useEffect(() => {
-    
-}, [barcode]);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await AxiosService.get('/api/resource/Product_SKU?fields=["*"]');
+      // Kiểm tra xem kết quả từ API có chứa dữ liệu không
+      if (response && response.data) {
+        // Thêm key cho mỗi phần tử trong mảng, sử dụng trường 'name'
+        const dataWithKey: DataType[] = response.data.map((item: DataType) => {
+          return {
+            ...item,
+            key: item.name,
+          };
+        });
+        setData(dataWithKey);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const deleteItem = () => {
     setLoading(true);
     // ajax request after empty completing
@@ -184,7 +180,11 @@ export default function Product_SKU() {
     onChange: onSelectChange,
   };
   const hasSelected = selectedRowKeys.length > 0;
-
+  const handleInputChange = (e) => {
+    setBarcodeValue(e.target.value);
+    // Generate barcode when the input value changes
+    JsBarcode('#barcode', e.target.value);
+  };
   const columns: TableColumnsType<DataType> = [
     {
       title: 'ID',
@@ -204,7 +204,10 @@ export default function Product_SKU() {
       title: 'Mã sản phẩm',
       dataIndex: 'barcode',
       render: (barcodeValue) => {
-        return <div dangerouslySetInnerHTML={{ __html: barcodeValue }} />;
+        const modifiedSvg = barcodeValue ? barcodeValue.replace(/height="[^"]*"/, (match) => {
+          return ' height="40px"'; // Giá trị bạn muốn thay thế height
+      }) : '';
+        return <div dangerouslySetInnerHTML={{ __html: modifiedSvg }} />;
       },
     },
     {
@@ -218,32 +221,53 @@ export default function Product_SKU() {
     {
       title: '',
       dataIndex: '',
-      render: () => (
-        <Button onClick={() => showModal(true)} icon={<EditOutlined />}>
+      render: (record) => (
+        <Button onClick={() => handleEdit(record)} icon={<EditOutlined />}>
         </Button>
       ),
       width: 80,
     },
   
   ];
+  const handleEdit = (record) => {
+    console.log(record);
+    showModal(true); // Mở modal
+    form.setFieldsValue({ 'productCode': record.product_code });
+    form.setFieldsValue({ 'productName': record.product_name });
+    form.setFieldsValue({ 'description': record.product_description });
+    form.setFieldsValue({ 'barcode': record.product_description });
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = (editing = false) => {
     setIsEditing(editing);
     setIsModalOpen(true);
   };
-
+  const getSVGString  = () => {
+    const svgElement = document.getElementById('barcode');
+    if (svgElement) {
+      return svgElement.outerHTML;
+    }
+    return null;
+  };
   const handleOk = async () => {
+
+    let index: string | null = null; // Khởi tạo index với giá trị null
+
+    const svgString = getSVGString();
+    console.log(svgString);
+    if (svgString !== null) {
+      index = svgString
+    }
     const productCode = form.getFieldValue('productCode');
-    const barCode = form.getFieldValue('barcode');
+    const barCode = index;
     const productName = form.getFieldValue('productName');
     const description = form.getFieldValue('description');
-    const fileList = form.getFieldValue('fileList');
-    console.log('File List:', fileList);
     let objparam = {
       product_code : productCode,
       product_name : productName,
       product_description : description,
+      barcode : barCode,
       "docstatus": 0,
       "doctype": "Product_SKU",
       photos : []
@@ -259,7 +283,6 @@ export default function Product_SKU() {
       uri_image: file.file_url
     }));
     objparam.photos.push(...photoObjects);
-    console.log(objparam);
     let formData = new FormData();
     const fields = {
       doc:JSON.stringify(objparam),
@@ -270,7 +293,12 @@ export default function Product_SKU() {
       formData.append(key, value);
   }
     const response = await AxiosService.post('api/method/frappe.desk.form.save.savedocs',formData);
-    console.log(response);
+    if(response.docs){
+      fetchData();
+      message.success('Thêm sản phẩm thành công');
+    }else{
+      message.error('Thêm sản phẩm thất bại');
+    }
     setFileListUpload([])
     form.setFieldsValue({ 'fileList': fileListUpload });
     setFileList([]);
@@ -356,11 +384,12 @@ export default function Product_SKU() {
       <Input />
     </Form.Item>
     <Form.Item label="Bar code" name="inputbarcode" rules={[{ required: true, message: 'Chưa nhập code!' }]}>
-      <Input onChange={(e) => setBarcode(e.target.value)}/>
+    <Input onChange={handleInputChange} />
     </Form.Item>
-    <Form.Item name="barcode" >
-     <div ref={barcodeRef}></div>
-    </Form.Item>
+   <div style={{ width: '100%',display: 'flex', justifyContent:'center',alignItems:'center', marginBottom:'10px' }}> 
+   <svg id="barcode"></svg>
+   </div>
+
     <Form.Item label="Tên sản phẩm" name="productName" rules={[{ required: true, message: 'Chưa nhập tên sản phẩm!' }]}>
       <Input />
     </Form.Item>
@@ -368,7 +397,7 @@ export default function Product_SKU() {
       name="description" >
       <Input.TextArea />
     </Form.Item>
-    <Form.Item label="Ảnh sản phẩm" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Chưa có ảnh sản phẩm!' }]}>
+    <Form.Item label="Ảnh sản phẩm" valuePropName="fileList" getValueFromEvent={normFile} >
           
           <Upload {...props} listType="picture-card" onChange={handleChange}>
             <button style={{ border: 0, background: 'none' }} type="button">
