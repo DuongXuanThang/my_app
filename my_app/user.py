@@ -9,7 +9,7 @@ def update_profile(**kwargs):
     try:
         employee_id = get_employee_id()
         date_format = '%Y/%m/%d'
-        fieldAccess = ["full_name","birth_date"]
+        fieldAccess = ["full_name","birth_date","user_image"]
         del kwargs['cmd']
         
         for field, value in dict(kwargs).items():
@@ -20,10 +20,10 @@ def update_profile(**kwargs):
                 frappe.response["result"] = []
                 return None
             elif field == 'birth_date':
-                dob = int(kwargs.get('birth_date'))
-                date_of_birth = int(kwargs.get('birth_date'))
-                date_of_birth = datetime.fromtimestamp(date_of_birth).strftime(date_format)
-                kwargs['birth_date'] = date_of_birth
+                dob = kwargs.get('birth_date')
+                # date_of_birth = int(kwargs.get('birth_date'))
+                # date_of_birth = datetime.fromtimestamp(date_of_birth).strftime(date_format)
+                # kwargs['birth_date'] = date_of_birth
                 
             elif field == 'full_name':
                 if kwargs.get("full_name"):
@@ -40,16 +40,16 @@ def update_profile(**kwargs):
                         kwargs['last_name'] = list_name[-1]
                     
                     del kwargs['full_name']
-            elif field == "image":
-                face_image = kwargs.get("image")
+            elif field == "user_image":
+                face_image = kwargs.get("user_image")
                 name_image = "avarta_"+employee_id
-                kwargs['image'] = post_image(name_image, face_image, "User", employee_id)
+                kwargs['user_image'] = post_image(name_image, face_image, "User", employee_id)
         if frappe.db.exists("User", employee_id, cache=True):
             doc = frappe.get_doc('User', employee_id)
             for field, value in dict(kwargs).items():
                 setattr(doc, field, value)
-                if field == "date_of_birth":
-                    kwargs['date_of_birth'] = dob
+                if field == "birth_date":
+                    kwargs['birth_date'] = dob
             doc.save()
         
         gen_response(200, 'success',kwargs)

@@ -1,0 +1,1 @@
+import{a9 as e,ab as t}from"./index-Hr4tnnDn.js";function r(){return e.jsx("div",{children:"RouterDetail"})}function i(){return e.jsxs(e.Fragment,{children:[e.jsx(t,{children:e.jsx("title",{children:" RouterControll"})}),e.jsx(r,{})]})}export{i as default};

@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: `../mbw_dms/public/mbw_fe`,
+    outDir: `../my_app/public/vgm_project`,
     emptyOutDir: true,
     target: 'es2021',
     commonjsOptions: {
