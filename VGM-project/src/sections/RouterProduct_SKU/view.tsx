@@ -209,7 +209,15 @@ export default function Product_SKU() {
   const handleInputChange = (e) => {
     setBarcodeValue(e.target.value);
     // Generate barcode when the input value changes
-    JsBarcode("#barcode", e.target.value);
+    JsBarcode("#barcode",e.target.value, {
+      width: 4,
+      height: 50,
+      displayValue: true,
+      font: "Arial",
+      text: e.target.value,
+      textMargin: 10,
+      fontSize: 13,
+    });
   };
   const columns: TableColumnsType<DataType> = [
     {
