@@ -1,1 +1,0 @@
-import{a9 as e,ab as r}from"./index-1UXu_NXu.js";function t(){return e.jsx("div",{children:"RouterEmployee"})}function o(){return e.jsxs(e.Fragment,{children:[e.jsx(r,{children:e.jsx("title",{children:" RouterControll"})}),e.jsx(t,{})]})}export{o as default};

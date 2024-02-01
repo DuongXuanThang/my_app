@@ -249,7 +249,7 @@ export default function ReportDetail() {
   <div style={{ display: 'flex' }}>
     <div style={{ paddingRight: '10px' }}>
     <Button type="primary" icon={<FileExcelOutlined />}>
-      Tãi xuống
+      Tải xuống
     </Button>
     </div>
     <Button type="primary" icon={<PlusOutlined />} onClick={() => showModal(false)}>

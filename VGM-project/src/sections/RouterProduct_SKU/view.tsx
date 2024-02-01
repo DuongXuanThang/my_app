@@ -459,7 +459,7 @@ if (startIndex !== -1 && endIndex !== -1) {
         <div style={{ display: "flex" }}>
           <div style={{ paddingRight: "10px" }}>
             <Button type="primary" icon={<FileExcelOutlined />}>
-              Tãi xuống
+              Tải xuống
             </Button>
           </div>
           <Button

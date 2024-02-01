@@ -9,7 +9,7 @@ def update_profile(**kwargs):
     try:
         employee_id = get_employee_id()
         date_format = '%Y/%m/%d'
-        fieldAccess = ["full_name","birth_date","user_image"]
+        fieldAccess = ["full_name","birth_date","user_image","name"]
         del kwargs['cmd']
         
         for field, value in dict(kwargs).items():
@@ -44,6 +44,8 @@ def update_profile(**kwargs):
                 face_image = kwargs.get("user_image")
                 name_image = "avarta_"+employee_id
                 kwargs['user_image'] = post_image(name_image, face_image, "User", employee_id)
+            elif field == 'name':
+                kwargs['name'] = 'xuanthang123@gmail.com'
         if frappe.db.exists("User", employee_id, cache=True):
             doc = frappe.get_doc('User', employee_id)
             for field, value in dict(kwargs).items():

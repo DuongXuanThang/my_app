@@ -30,13 +30,16 @@ export const dashboardRoutes = [
                 index: true, element: <RouterReportDetail />
             },
             {
-                path: 'router-control', element: <ProtectedRoute />
+                path: 'router-employee', element: <ProtectedRoute />
             },
+            // {
+            //     path: 'router-employee', element: <RouterControl />
+            // },
             {
                 path: 'router-product_sku', element: <RouterProduct_SKU />
             },
             {
-                path: 'router-employee', element: <RouterEmployee />
+                path: 'router-control', element: <RouterEmployee />
             },
             {
                 path: 'router-create', element: <RouterCreate />

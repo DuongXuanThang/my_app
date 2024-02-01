@@ -12,6 +12,6 @@ export default function useCookie() {
         getUserCookie,
       } = useFrappeAuth();
     return {
-        isLoading,currentUser
+        isLoading,currentUser,isValidating,login,logout,updateCurrentUser,getUserCookie,error
     }
 }

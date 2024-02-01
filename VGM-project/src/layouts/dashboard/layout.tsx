@@ -1,10 +1,10 @@
 import React from 'react'
 // import Header from './header'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useCookie from '../../hooks/useCookie';
 import './layout.css';
-import { Dropdown,Avatar } from 'antd';
+import { Dropdown,Avatar,Tooltip,Row,Col } from 'antd';
 import {
   BarsOutlined,
   EnvironmentOutlined,
@@ -13,7 +13,8 @@ import {
   UserOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined, 
-  LogoutOutlined
+  LogoutOutlined,
+  SettingOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme ,Button} from 'antd';
@@ -25,10 +26,35 @@ type Props = {
 
 export default function DashboardLayout({children}:Props) {
   const [collapsed, setCollapsed] = useState(false);
-  const { isLoading, currentUser }: { isLoading: boolean, currentUser: any } = useCookie();
+  const [header, setHeader] = useState("Báo cáo");
+  const { isLoading, currentUser,login }: { isLoading: boolean, currentUser: any ,login : any} = useCookie();
+  useEffect(() => {
+    // Define your handleLogin function
+    const handleLogin = async () => {
+        try {
+            // Call the login function
+            const response = await login({
+              username: 'administrator',
+              password: '123'
+          }); // Assuming login returns a promise
+            console.log(response); // Log the response from the login function
+        } catch (error) {
+            console.error(error); // Log any errors that occur during login
+        }
+    };
+
+    // Call handleLogin when the component mounts
+    handleLogin();
+
+    // Clean up function (optional)
+    return () => {
+        // Perform any cleanup if needed
+    };
+}, []);
   const navigate = useNavigate();
-  const handleItemClick = (itemName: string) => {
+  const handleItemClick = (itemName: string,header: string) => {
     console.log(`Item clicked: ${itemName}`);
+    setHeader(header)
     navigate(itemName);
   };
 
@@ -48,10 +74,11 @@ export default function DashboardLayout({children}:Props) {
     } as MenuItem;
   }
   const items: MenuItem[] = [
-    getItem('Báo cáo', '1', <PieChartOutlined />, () => handleItemClick('/')),
-    ...(!isLoading && currentUser === 'Administrator' ? [getItem('Nhân viên', '2', <UserOutlined />, () => handleItemClick('/router-control'))] : []),
+    getItem('Báo cáo', '1', <PieChartOutlined />, () => handleItemClick('/',"Báo cáo")),
+    ...(!isLoading && currentUser === 'Administrator' ? [getItem('Nhân viên', '2', <UserOutlined />, () => handleItemClick('/router-employee',"Nhân viên"))] : []),
+    // getItem('Nhân viên', '2', <UserOutlined />, () => handleItemClick('/router-employee',"Nhân viên")),
     getItem('Danh mục', 'sub1', <BarsOutlined />, undefined, [
-        getItem('Sản phẩm', '3', undefined, () => handleItemClick('/router-product_sku')),
+        getItem('Sản phẩm', '3', undefined, () => handleItemClick('/router-product_sku',"Sản phẩm")),
         getItem('Tài sản', '4', undefined, () => { console.log('123') }),
         getItem('Vật phẩm trưng bày', '5', undefined, () => { console.log('123') }),
     ]),
@@ -72,6 +99,9 @@ type MenuItem = Required<MenuProps>['items'][number];
       <Menu.Item key="profile" icon={<UserOutlined />}>
         <a href="/">Thông tin cá nhân</a>
       </Menu.Item>
+      <Menu.Item key="setting" icon={<SettingOutlined />}>
+        <a href="/">Cài đặt</a>
+      </Menu.Item>
       <Menu.Item key="logout" icon={<LogoutOutlined />}>
         <a href="/">Đăng xuất</a>
       </Menu.Item>
@@ -89,8 +119,10 @@ type MenuItem = Required<MenuProps>['items'][number];
         </Menu>
     </Sider>
     <Layout>
-    <Header style={{ padding: 0, background: colorBgContainer, display:'flex', justifyContent:'space-between',alignItems:'center' }}>
-          <Button
+    <Header style={{ padding: 0, background: colorBgContainer }}>
+      <Row justify="space-between" align="middle">
+        <Col md ={18}>
+        <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
@@ -100,11 +132,17 @@ type MenuItem = Required<MenuProps>['items'][number];
               height: 64,
             }}
           />
-            <div style={{paddingRight:'10px'}}>
-            <Dropdown overlay={UserProfileMenu} trigger={['click']}>
-      <Avatar icon={<UserOutlined />}  />
-    </Dropdown>
-            </div>
+        </Col>
+        <Col md={6} style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '20px',height:'35px' }}>
+  <Dropdown overlay={UserProfileMenu} trigger={['click']} placement="bottomRight" overlayStyle={{ marginTop: '8px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+      <Avatar icon={<UserOutlined />} />
+      <span style={{ marginLeft: '8px' }}>{currentUser ? currentUser : "Administrator"}</span>
+    </div>
+  </Dropdown>
+</Col>
+      </Row>
+        
            
            
           
@@ -112,7 +150,7 @@ type MenuItem = Required<MenuProps>['items'][number];
       {/* <Header style={{ padding: 0, background: colorBgContainer }} /> */}
       <Content style={{ margin: '0 16px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Báo cáo</Breadcrumb.Item>
+          <Breadcrumb.Item>{header}</Breadcrumb.Item>
         </Breadcrumb>
         <div
           style={{
