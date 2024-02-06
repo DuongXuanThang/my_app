@@ -9,13 +9,14 @@ import {
   Form,
   Upload,
   message,
-  UploadFile,
+  Popconfirm
 } from "antd";
 import type {
   GetRef,
   TableColumnsType,
   TableColumnType,
   UploadProps,
+  UploadFile
 } from "antd";
 import { TableCustom } from "../../components";
 import { AxiosService } from "../../services/server";
@@ -31,6 +32,7 @@ import {
   FileExcelOutlined,
   EditOutlined,
 } from "@ant-design/icons";
+import { stringify } from "querystring";
 interface DataType {
   key: React.Key;
   name: string;
@@ -43,7 +45,39 @@ type InputRef = GetRef<typeof Input>;
 type DataIndex = keyof DataType;
 
 export default function Product_SKU() {
+  const [fileListforUpdate, setFileListforUpdate] = useState<UploadFile[]>([
+    // {
+    //   uid: '-1',
+    //   name: 'image.png',
+    //   status: 'done',
+    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    // },
+    // {
+    //   uid: '-2',
+    //   name: 'image.png',
+    //   status: 'done',
+    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    // },
+    // {
+    //   uid: '-3',
+    //   name: 'image.png',
+    //   status: 'done',
+    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    // },
+    
+  ]);
+  const handleChangeEdit: UploadProps['onChange'] = ({ fileList: newFileList }) =>
+  setFileListforUpdate(newFileList);
+
+const uploadButton = (
+  <button style={{ border: 0, background: 'none' }} type="button">
+    <PlusOutlined />
+    <div style={{ marginTop: 8 }}>Thêm ảnh</div>
+  </button>
+);
   const [barcodeValue, setBarcodeValue] = useState("");
+  const [isBarcodeRendered, setIsBarcodeRendered] = useState(false);
+
   const [form] = useForm();
   const [fileListUpload, setFileListUpload] = useState<[]>([]);
   const [fileList, setFileList] = useState<[]>([]);
@@ -187,9 +221,30 @@ export default function Product_SKU() {
       setLoading(false);
     }
   };
-  const deleteItem = () => {
+  const deleteItem = async () => {
     setLoading(true);
     // ajax request after empty completing
+    console.log(selectedRowKeys);
+    let formData = new FormData();
+    const fields = {
+      items: JSON.stringify(selectedRowKeys),
+      doctype: 'Product_SKU'
+    };
+    for (const [key, value] of Object.entries(fields)) {
+      formData.append(key, value);
+    }
+    const response = await AxiosService.post(
+      '/api/method/frappe.desk.reportview.delete_items',
+      formData
+    );
+    if(response){
+      message.success("Xóa sản phẩm thành công")
+      fetchData()
+    }else{
+      message.success("Xóa sản phẩm thành công")
+      fetchData()
+    }
+   
     setTimeout(() => {
       setSelectedRowKeys([]);
       setLoading(false);
@@ -197,7 +252,6 @@ export default function Product_SKU() {
   };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -237,10 +291,34 @@ export default function Product_SKU() {
     {
       title: "Mã sản phẩm",
       dataIndex: "barcode",
-      render: (barcodeValue) => {
-        
+      render: (code) => {
+        // Kiểm tra xem barcodeValue có phải là một chuỗi SVG không
+        const isSVG = code.startsWith('<svg');
+    
+        // Nếu barcodeValue là chuỗi SVG
+        if (isSVG) {
+            // Tạo một phần tử div để chứa SVG
+            const div = document.createElement('div');
+            div.innerHTML = code;
+            // Lấy phần tử SVG từ div
+            const svgElement = div.querySelector('svg');
+    
+            // Kiểm tra nếu tồn tại phần tử SVG
+            if (svgElement) {
+                svgElement.removeAttribute('id');
+                svgElement.setAttribute('height', '40');
+                svgElement.setAttribute('width', '120');
+                // Lấy chuỗi HTML của phần tử SVG sau khi đã thay đổi
+                const modifiedSvgString = svgElement.outerHTML;
+    
+                // Trả về phần tử div chứa SVG đã được chỉnh sửa
+                return <div dangerouslySetInnerHTML={{ __html: modifiedSvgString }} />;
+            }
+        }
+    
+        // Nếu không phải là chuỗi SVG, chỉ đơn giản trả về chuỗi đã được xác thực
         return <div dangerouslySetInnerHTML={{ __html: barcodeValue }} />;
-      },
+    }
     },
     {
       title: "Mô tả",
@@ -273,11 +351,18 @@ export default function Product_SKU() {
       formData.append(key, value);
     }
     const response = await AxiosService.post(
-      "api/method/frappe.client.get",
+      "/api/method/frappe.client.get",
       formData
     );
-    console.log(response);
     if(response.message){
+      const updatedFileList = (response.message.photos as Array<any>).map((photo: any) => {
+        return {
+            ...photo,
+            // url: "http://mbw.ts:8000" + photo.uri_image // Thêm thuộc tính url với giá trị là uri_image
+            url: photo.uri_image
+        };
+    });
+    setFileListforUpdate(updatedFileList);
       var svgString =  response.message.barcode  
 // Tìm vị trí bắt đầu của thẻ <text>
 var startIndex = svgString.indexOf("<text");
@@ -296,10 +381,12 @@ if (startIndex !== -1 && endIndex !== -1) {
     
     if (matches && matches.length > 1) {
         var textValue = matches[1]; // Giá trị văn bản trong thẻ <text>
-        console.log(textValue); // In ra giá trị văn bản
         setBarcodeValue(textValue);
         // Generate barcode when the input value changes
         JsBarcode("#barcode", textValue);
+        form.setFieldsValue({ inputbarcode: textValue });
+       
+        
     } else {
         console.log("Không tìm thấy giá trị văn bản trong thẻ <text>.");
     }
@@ -307,11 +394,12 @@ if (startIndex !== -1 && endIndex !== -1) {
     console.log("Không tìm thấy thẻ <text> trong chuỗi SVG.");
 }
     }
-
-    // form.setFieldsValue({ productCode: record.product_code });
-    // form.setFieldsValue({ productName: record.product_name });
-    // form.setFieldsValue({ description: record.product_description });
-    // form.setFieldsValue({ barcode: record.product_description });
+   
+    form.setFieldsValue({ productCode: record.product_code });
+    form.setFieldsValue({ productName: record.product_name });
+    form.setFieldsValue({ description: record.product_description });
+    
+   
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -327,60 +415,65 @@ if (startIndex !== -1 && endIndex !== -1) {
     return null;
   };
   const handleOk = async () => {
-    let index: string | null = null; // Khởi tạo index với giá trị null
+    
+    if(isEditing){
 
-    const svgString = getSVGString();
-    console.log(svgString);
-    if (svgString !== null) {
-      index = svgString;
-    }
+    }else{
+    let index: string | null = null; // Khởi tạo index với giá trị null
     const productCode = form.getFieldValue("productCode");
-    const barCode = index;
     const productName = form.getFieldValue("productName");
     const description = form.getFieldValue("description");
-    let objparam = {
-      product_code: productCode,
-      product_name: productName,
-      product_description: description,
-      barcode: barCode,
-      docstatus: 0,
-      doctype: "Product_SKU",
-      photos: [],
-    };
-    const photoObjects = fileListUpload.map((file) => ({
-      docstatus: 0,
-      doctype: "ProductImage_SKU",
-      name: "new-product_image-buhawsuxpf",
-      owner: file.owner,
-      parent: "new-product-xjwkkysins",
-      parentfield: "photos",
-      parenttype: "Product_SKU",
-      uri_image: file.file_url,
-    }));
-    objparam.photos.push(...photoObjects);
-    let formData = new FormData();
-    const fields = {
-      doc: JSON.stringify(objparam),
-      action: "Save",
-    };
-
-    for (const [key, value] of Object.entries(fields)) {
-      formData.append(key, value);
+      const svgString = getSVGString();
+      if (svgString !== null) {
+        index = svgString;
+      }
+      const barCode = index;
+      let objparam = {
+        product_code: productCode,
+        product_name: productName,
+        product_description: description,
+        barcode: barCode,
+        docstatus: 0,
+        doctype: "Product_SKU",
+        photos: [],
+      };
+      console.log(fileListUpload);
+      const photoObjects = fileListUpload.map((file) => ({
+        docstatus: 0,
+        doctype: "ProductImage_SKU",
+        name: "new-product_image-buhawsuxpf",
+        owner: file.owner,
+        parent: "new-product-xjwkkysins",
+        parentfield: "photos",
+        parenttype: "Product_SKU",
+        uri_image: file.file_url,
+      }));
+      objparam.photos.push(...photoObjects);
+      let formData = new FormData();
+      const fields = {
+        doc: JSON.stringify(objparam),
+        action: "Save",
+      };
+  
+      for (const [key, value] of Object.entries(fields)) {
+        formData.append(key, value);
+      }
+      const response = await AxiosService.post(
+        "/api/method/frappe.desk.form.save.savedocs",
+        formData
+      );
+      if (response.docs) {
+        fetchData();
+        message.success("Thêm sản phẩm thành công");
+      } else {
+        message.error("Thêm sản phẩm thất bại");
+      }
+      setFileListUpload([]);
+      form.setFieldsValue({ fileList: fileListUpload });
+      setFileList([]);
+      setIsModalOpen(false);
     }
-    const response = await AxiosService.post(
-      "api/method/frappe.desk.form.save.savedocs",
-      formData
-    );
-    if (response.docs) {
-      fetchData();
-      message.success("Thêm sản phẩm thành công");
-    } else {
-      message.error("Thêm sản phẩm thất bại");
-    }
-    setFileListUpload([]);
-    form.setFieldsValue({ fileList: fileListUpload });
-    setFileList([]);
-    setIsModalOpen(false);
+   
   };
   const handleCancel = () => {
     setFileList([]);
@@ -414,9 +507,7 @@ if (startIndex !== -1 && endIndex !== -1) {
         "/api/method/upload_file",
         formData
       );
-      console.log(response);
       if (response.message) {
-        //setFileListUpload(prevFileList => [...prevFileList, response.message]);
         fileListUpload.push(response.message);
         message.success("Tải ảnh thành công");
       } else {
@@ -427,7 +518,11 @@ if (startIndex !== -1 && endIndex !== -1) {
   };
   const handleChange = (info: any) => {
     // Xử lý thông tin và cập nhật giá trị fileList
-    form.setFieldsValue({ fileList: fileListUpload });
+    form.setFieldsValue({ fileList: fileListUpload });  
+  };
+  const confirm = (e: React.MouseEvent<HTMLElement>) => {
+    console.log(e);
+    deleteItem();
   };
   return (
     <div>
@@ -441,16 +536,23 @@ if (startIndex !== -1 && endIndex !== -1) {
       >
         <div>
           {hasSelected && (
+            <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this task?"
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+          >
             <Button
               type="primary"
               danger
               ghost
-              onClick={deleteItem}
               loading={loading}
               icon={<DeleteOutlined />}
             >
               Xóa
             </Button>
+            </Popconfirm>
           )}
           <span style={{ marginLeft: 8 }}>
             {hasSelected ? `Đã chọn ${selectedRowKeys.length} sản phẩm` : ""}
@@ -508,18 +610,19 @@ if (startIndex !== -1 && endIndex !== -1) {
           >
             <Input onChange={handleInputChange} />
           </Form.Item>
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: "10px",
-            }}
-          >
-            <svg id="barcode"></svg>
-          </div>
-          <div></div>
+         
+  <div
+    style={{
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: "10px",
+    }}
+  >
+    <svg id="barcode"></svg>
+  </div>
+
           <Form.Item
             label="Tên sản phẩm"
             name="productName"
@@ -532,15 +635,25 @@ if (startIndex !== -1 && endIndex !== -1) {
           </Form.Item>
           <Form.Item
             label="Ảnh sản phẩm"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
+          > 
+          {isEditing ? (
+            <Upload
+            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+            listType="picture-card"
+            fileList={fileListforUpdate}
+            onChange={handleChangeEdit}
           >
+            {fileListforUpdate.length >= 8 ? null : uploadButton}
+          </Upload>
+          ) : (
             <Upload {...props} listType="picture-card" onChange={handleChange}>
-              <button style={{ border: 0, background: "none" }} type="button">
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Thêm ảnh</div>
-              </button>
-            </Upload>
+            <button style={{ border: 0, background: "none" }} type="button">
+              <PlusOutlined />
+              <div style={{ marginTop: 8 }}>Thêm ảnh</div>
+            </button>
+          </Upload>
+          )}
+           
           </Form.Item>
         </Form>
       </Modal>
